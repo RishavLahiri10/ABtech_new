@@ -29,7 +29,7 @@ export default function Contact() {
     setStatus('Submitting your inquiry...');
 
     try {
-      const response = await fetch('http://localhost/abtech_backend/api/contact.php', {
+      const response = await fetch('https://abtech.byte4ge.shop/api/V1/contact.php', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
