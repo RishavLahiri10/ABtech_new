@@ -104,12 +104,25 @@ export function Footer() {
         </div>
       </div>
       <div className="container footer-bottom">
-        <span>
-          © {new Date().getFullYear()} {institute.fullName}. All rights reserved.
-        </span>
-        <span>
-          NIOS · BOSSE · IGNOU · College Admissions · Career Counselling Guidance
-        </span>
+        <div className="footer-bottom-left">
+          <span>
+            © {new Date().getFullYear()} {institute.fullName}. All rights reserved.
+          </span>
+          <span className="footer-subtext">
+            NIOS · BOSSE · IGNOU · College Admissions · Career Counselling Guidance
+          </span>
+        </div>
+        <div className="footer-developer-credit">
+          <span className="credit-label">Website Designed &amp; Maintained By</span>
+          <div className="credit-brand">
+            <img
+              src="/bizelevate-logo.png"
+              alt="BizElevate Logo"
+              className="developer-logo"
+            />
+            <span className="credit-name">BizElevate</span>
+          </div>
+        </div>
       </div>
     </footer>
   );

@@ -1,11 +1,42 @@
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ContactStrip } from '../components';
 import { highlights, services } from '../content';
 
 export default function Home({ onOpenInquiry }) {
+  const [scrollY, setScrollY] = useState(0);
+
+  useEffect(() => {
+    let ticking = false;
+    const handleScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          setScrollY(window.scrollY);
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
     <>
-      <section className="hero">
+      {/* Hero Section with Parallax Elements */}
+      <section className="hero parallax-hero-wrapper">
+        <div
+          className="parallax-bg-element parallax-orb-1"
+          style={{ transform: `translate3d(0, ${scrollY * 0.18}px, 0)` }}
+          aria-hidden="true"
+        />
+        <div
+          className="parallax-bg-element parallax-orb-2"
+          style={{ transform: `translate3d(0, ${scrollY * -0.12}px, 0)` }}
+          aria-hidden="true"
+        />
+
         <div className="container hero-grid">
           <div className="hero-content">
             <p className="eyebrow hero-eyebrow">
@@ -51,7 +82,10 @@ export default function Home({ onOpenInquiry }) {
             </div>
           </div>
 
-          <div className="hero-picture">
+          <div
+            className="hero-picture parallax-card"
+            style={{ transform: `translate3d(0, ${scrollY * -0.06}px, 0)` }}
+          >
             <div className="hero-logo-banner">
               <img
                 src="/logo.png"
@@ -78,7 +112,13 @@ export default function Home({ onOpenInquiry }) {
       </section>
 
       {/* Services Showcase */}
-      <section className="container section">
+      <section className="container section relative-section">
+        <div
+          className="parallax-bg-pattern"
+          style={{ transform: `translate3d(0, ${(scrollY - 400) * 0.08}px, 0)` }}
+          aria-hidden="true"
+        />
+
         <div className="section-heading">
           <div>
             <p className="eyebrow">OUR SPECIALIZATIONS</p>
@@ -90,8 +130,14 @@ export default function Home({ onOpenInquiry }) {
         </div>
 
         <div className="home-services-grid">
-          {services.map((s) => (
-            <div className="home-service-card" key={s.id}>
+          {services.map((s, idx) => (
+            <div
+              className="home-service-card"
+              key={s.id}
+              style={{
+                transform: `translate3d(0, ${Math.max(0, (scrollY - 300) * (idx % 2 === 0 ? -0.02 : 0.02))}px, 0)`,
+              }}
+            >
               <div className="home-service-badge">{s.badge}</div>
               <h3 className="home-service-title">{s.shortName}</h3>
               <p className="home-service-subtitle">{s.title}</p>
@@ -107,6 +153,36 @@ export default function Home({ onOpenInquiry }) {
               </div>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* Parallax Full-Width Feature Section */}
+      <section className="parallax-feature-strip">
+        <div
+          className="parallax-feature-bg"
+          style={{ transform: `translate3d(0, ${(scrollY - 900) * 0.15}px, 0)` }}
+          aria-hidden="true"
+        />
+        <div className="container parallax-feature-content">
+          <p className="parallax-eyebrow">ACCELERATE YOUR ACADEMIC PROGRESS</p>
+          <h2 className="parallax-title">
+            Flexible Education. Recognized Certifications. Zero Gaps.
+          </h2>
+          <p className="parallax-text">
+            Whether you are completing 10th or 12th through NIOS/BOSSE, earning distance degrees with IGNOU, or aiming for direct college admissions, our counselors make every step transparent and stress-free.
+          </p>
+          <div className="parallax-actions">
+            <button
+              className="button button-white"
+              type="button"
+              onClick={onOpenInquiry}
+            >
+              Get Free Admission Guidance ↗
+            </button>
+            <Link className="button button-outline-white" to="/services">
+              View All Programs
+            </Link>
+          </div>
         </div>
       </section>
 

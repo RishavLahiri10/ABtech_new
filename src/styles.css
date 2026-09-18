@@ -426,9 +426,70 @@ nav a.active::after {
   background: linear-gradient(180deg, var(--maroon-subtle) 0%, var(--white) 100%);
   padding: 60px 0 70px;
   border-bottom: 1px solid var(--maroon-border);
+  position: relative;
+  overflow: hidden;
+}
+
+.parallax-hero-wrapper {
+  position: relative;
+  overflow: hidden;
+}
+
+.parallax-bg-element {
+  position: absolute;
+  pointer-events: none;
+  border-radius: 50%;
+  z-index: 0;
+  will-change: transform;
+  transition: transform 0.08s ease-out;
+}
+
+.parallax-orb-1 {
+  top: -30px;
+  right: -50px;
+  width: 380px;
+  height: 380px;
+  background: radial-gradient(circle, rgba(133, 19, 41, 0.08) 0%, rgba(133, 19, 41, 0) 70%);
+  border: 2px dashed rgba(133, 19, 41, 0.12);
+}
+
+.parallax-orb-2 {
+  bottom: -60px;
+  left: -40px;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(133, 19, 41, 0.06) 0%, rgba(133, 19, 41, 0) 70%);
+  border: 1px solid rgba(133, 19, 41, 0.1);
+}
+
+.parallax-card {
+  will-change: transform;
+  transition: transform 0.08s ease-out;
+  position: relative;
+  z-index: 1;
+}
+
+.relative-section {
+  position: relative;
+  overflow: hidden;
+}
+
+.parallax-bg-pattern {
+  position: absolute;
+  top: 15%;
+  right: -8%;
+  width: 460px;
+  height: 460px;
+  background: radial-gradient(circle, rgba(133, 19, 41, 0.05) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  will-change: transform;
+  z-index: 0;
 }
 
 .hero-grid {
+  position: relative;
+  z-index: 1;
   display: grid;
   gap: 40px;
   align-items: center;
@@ -742,6 +803,70 @@ nav a.active::after {
 }
 
 /* ==========================================================================
+   Parallax Feature Strip
+   ========================================================================== */
+
+.parallax-feature-strip {
+  position: relative;
+  background: var(--maroon);
+  color: var(--white);
+  padding-block: 80px;
+  overflow: hidden;
+  text-align: center;
+  border-block: 2px solid var(--maroon-dark);
+}
+
+.parallax-feature-bg {
+  position: absolute;
+  top: -40%;
+  left: -10%;
+  right: -10%;
+  bottom: -40%;
+  background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 65%),
+              linear-gradient(45deg, rgba(66, 6, 18, 0.4) 25%, transparent 25%, transparent 50%, rgba(66, 6, 18, 0.4) 50%, rgba(66, 6, 18, 0.4) 75%, transparent 75%, transparent);
+  background-size: 100% 100%, 60px 60px;
+  pointer-events: none;
+  will-change: transform;
+  transition: transform 0.08s ease-out;
+}
+
+.parallax-feature-content {
+  position: relative;
+  z-index: 1;
+  max-width: 840px;
+  margin-inline: auto;
+}
+
+.parallax-eyebrow {
+  color: rgba(255, 255, 255, 0.9) !important;
+  font-size: 0.8125rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  margin-bottom: 12px;
+}
+
+.parallax-title {
+  color: var(--white) !important;
+  font-size: clamp(2rem, 3.6vw, 2.9rem);
+  margin-bottom: 16px;
+  line-height: 1.2;
+}
+
+.parallax-text {
+  color: rgba(255, 255, 255, 0.92) !important;
+  font-size: 1.1rem;
+  line-height: 1.8;
+  margin-bottom: 32px;
+}
+
+.parallax-actions {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+/* ==========================================================================
    Trust & Highlight Sections
    ========================================================================== */
 
@@ -1008,13 +1133,70 @@ footer address strong {
 .footer-bottom {
   display: flex;
   justify-content: space-between;
-  gap: 12px 24px;
+  align-items: center;
+  gap: 20px 24px;
   flex-wrap: wrap;
   padding-top: 28px;
   border-top: 1px solid rgba(255, 255, 255, 0.15);
   margin-top: 40px;
   font-size: 0.8125rem;
   color: rgba(255, 255, 255, 0.7);
+}
+
+.footer-bottom-left {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.footer-subtext {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.footer-developer-credit {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  padding: 8px 16px;
+  border-radius: 40px;
+  transition: all 0.2s ease;
+}
+
+.footer-developer-credit:hover {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.credit-label {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.credit-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.developer-logo {
+  height: 28px;
+  width: 28px;
+  object-fit: contain;
+  background: #ffffff;
+  border-radius: 6px;
+  padding: 2px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.credit-name {
+  font-size: 0.875rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: #ffffff;
 }
 
 /* ==========================================================================
