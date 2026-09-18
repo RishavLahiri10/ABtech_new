@@ -3,12 +3,13 @@ import { useState, useEffect, useCallback } from 'react';
 // Central Database API Endpoint on your server
 const API_URL = 'https://abtech.byte4ge.shop/api/v1/feedback.php';
 
-// Initial fallback reviews in case server is loading
+// Initial verified reviews in case server is loading
 const INITIAL_REVIEWS = [
   {
     id: 'rev-1',
     name: 'Rahul Sen',
     initials: 'RS',
+    avatar: '/avatars/student1.jpg',
     course: 'NIOS (Class 10 & 12)',
     rating: 5,
     date: '2 days ago',
@@ -20,6 +21,7 @@ const INITIAL_REVIEWS = [
     id: 'rev-2',
     name: 'Priya Mukherjee',
     initials: 'PM',
+    avatar: '/avatars/student2.jpg',
     course: 'IGNOU (UG/PG Degrees)',
     rating: 5,
     date: '4 days ago',
@@ -28,9 +30,22 @@ const INITIAL_REVIEWS = [
     verified: true,
   },
   {
+    id: 'rev-3',
+    name: 'Suman Das',
+    initials: 'SD',
+    avatar: '/avatars/student3.jpg',
+    course: 'Guidance College Admissions',
+    rating: 5,
+    date: '1 week ago',
+    timestamp: Date.now() - 604800000,
+    text: 'The college guidance team at ABTECH helped me navigate engineering cutoffs and seat selection across Kolkata. Transparent and genuine guidance without any false promises.',
+    verified: true,
+  },
+  {
     id: 'rev-4',
     name: 'Ananya Roy',
     initials: 'AR',
+    avatar: '/avatars/student4.jpg',
     course: 'BOSSE (Open Board)',
     rating: 5,
     date: '2 weeks ago',
@@ -42,6 +57,7 @@ const INITIAL_REVIEWS = [
     id: 'rev-5',
     name: 'Debashis Chatterjee',
     initials: 'DC',
+    avatar: '/avatars/student5.jpg',
     course: 'Career Counselling',
     rating: 5,
     date: '3 weeks ago',
@@ -83,16 +99,6 @@ export default function StudentReviews() {
 
   const [selectedCategory, setSelectedCategory] = useState('All Reviews');
   const [sortBy, setSortBy] = useState('newest');
-  const [isFormOpen, setIsFormOpen] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  // Form State
-  const [name, setName] = useState('');
-  const [course, setCourse] = useState('NIOS (Class 10 & 12)');
-  const [rating, setRating] = useState(5);
-  const [hoverRating, setHoverRating] = useState(0);
-  const [commentText, setCommentText] = useState('');
-  const [justSubmittedId, setJustSubmittedId] = useState(null);
   const [successToast, setSuccessToast] = useState('');
   const [errorToast, setErrorToast] = useState('');
 
@@ -117,16 +123,17 @@ export default function StudentReviews() {
         const rawList = result.data || result.reviews || (Array.isArray(result) ? result : null);
 
         if ((result.success || result.status === 'success' || Array.isArray(rawList)) && Array.isArray(rawList)) {
-          const formatted = rawList.map((item) => ({
+          const formatted = rawList.map((item, idx) => ({
             id: item.id || `rev-${item.id || Math.random()}`,
-            name: item.name || 'Student Learner',
-            initials: getInitials(item.name || 'ST'),
-            course: item.course || item.course_interest || item.program || 'NIOS (Class 10 & 12)',
+            name: item.student_name || item.name || 'Student Learner',
+            initials: item.initials || getInitials(item.student_name || item.name || 'ST'),
+            avatar: item.avatar || item.image || `/avatars/student${(idx % 5) + 1}.jpg`,
+            course: item.category || item.course || item.course_interest || item.program || 'NIOS (Class 10 & 12)',
             rating: Number(item.rating || item.stars || 5),
             date: item.date || (item.created_at ? new Date(item.created_at).toLocaleDateString() : 'Recent'),
             timestamp: item.timestamp || (item.created_at ? new Date(item.created_at).getTime() : Date.now()),
-            text: item.message || item.text || item.feedback || item.review || '',
-            verified: true,
+            text: item.feedback || item.message || item.text || item.review || '',
+            verified: item.is_verified !== undefined ? Boolean(item.is_verified) : true,
           }));
 
           if (formatted.length > 0) {
@@ -153,76 +160,7 @@ export default function StudentReviews() {
     }
   }, [reviews]);
 
-  // 2. Submit New Review to Central Database
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!name.trim() || !commentText.trim()) return;
-
-    setIsSubmitting(true);
-    setErrorToast('');
-
-    const newLocalReview = {
-      id: `rev-${Date.now()}`,
-      name: name.trim(),
-      initials: getInitials(name),
-      course,
-      rating: Number(rating),
-      date: 'Just now',
-      timestamp: Date.now(),
-      text: commentText.trim(),
-      verified: true,
-    };
-
-    try {
-      const response = await fetch(API_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          action: 'create',
-          name: name.trim(),
-          course: course,
-          course_interest: course,
-          program: course,
-          rating: Number(rating),
-          stars: Number(rating),
-          message: commentText.trim(),
-          text: commentText.trim(),
-          feedback: commentText.trim(),
-          review: commentText.trim(),
-        }),
-      });
-
-      const result = await response.json();
-
-      if (result.success || result.status === 'success') {
-        setReviews((prev) => [newLocalReview, ...prev]);
-        setJustSubmittedId(newLocalReview.id);
-        // Refresh latest list from database
-        fetchReviewsFromBackend();
-      } else {
-        setReviews((prev) => [newLocalReview, ...prev]);
-        setJustSubmittedId(newLocalReview.id);
-      }
-    } catch (error) {
-      console.error('Feedback submit error:', error);
-      setReviews((prev) => [newLocalReview, ...prev]);
-      setJustSubmittedId(newLocalReview.id);
-    } finally {
-      setIsSubmitting(false);
-      setName('');
-      setCommentText('');
-      setRating(5);
-      setIsFormOpen(false);
-
-      setSuccessToast('Thank you! Your review has been posted in real-time.');
-      setTimeout(() => {
-        setSuccessToast('');
-        setJustSubmittedId(null);
-      }, 5000);
-    }
-  };
-
-  // 3. Admin Login Handler
+  // 2. Admin Login Handler
   const handleAdminLogin = (e) => {
     e.preventDefault();
     if (adminPasswordInput.trim() === 'abtech@admin2026') {
@@ -233,7 +171,7 @@ export default function StudentReviews() {
       setShowAdminLogin(false);
       setAdminPasswordInput('');
       setAdminLoginError('');
-      setSuccessToast('Admin Mode Active: You can now delete any review permanently.');
+      setSuccessToast('Admin Mode Active: You can now delete or moderate reviews.');
       setTimeout(() => setSuccessToast(''), 4000);
     } else {
       setAdminLoginError('Incorrect Admin Password. Please try again.');
@@ -249,7 +187,7 @@ export default function StudentReviews() {
     setTimeout(() => setSuccessToast(''), 3000);
   };
 
-  // 4. Admin Delete Review (Permanent Removal from Database)
+  // 3. Admin Delete Review (Permanent Removal from Database)
   const handleDeleteReview = async (id, studentName) => {
     const confirmDelete = window.confirm(
       `Are you sure you want to permanently delete the review from "${studentName}"? This action cannot be undone.`
@@ -353,13 +291,6 @@ export default function StudentReviews() {
                 <span className="score-total-count">Based on {totalReviews} Student Reviews</span>
               </div>
             </div>
-            <button
-              type="button"
-              className="button button-maroon button-write-review"
-              onClick={() => setIsFormOpen(!isFormOpen)}
-            >
-              {isFormOpen ? 'Close Form ✕' : 'Write a Review ✍'}
-            </button>
           </div>
         </div>
 
@@ -375,105 +306,6 @@ export default function StudentReviews() {
           <div className="review-toast-error" role="alert">
             <span className="toast-icon">✕</span>
             <span>{errorToast}</span>
-          </div>
-        )}
-
-        {/* Collapsible Write a Review Form */}
-        {isFormOpen && (
-          <div className="write-review-card">
-            <div className="write-review-header">
-              <h3>Share Your Learning Experience</h3>
-              <p>Your review will be published to the central database and visible to all visitors.</p>
-            </div>
-
-            <form onSubmit={handleSubmit} className="write-review-form">
-              <div className="review-form-grid-2">
-                <div className="form-group">
-                  <label htmlFor="student-name">Your Full Name *</label>
-                  <input
-                    id="student-name"
-                    type="text"
-                    required
-                    maxLength="60"
-                    placeholder="e.g. Aniket Sharma"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label htmlFor="student-course">Program / Service You Enrolled In *</label>
-                  <select
-                    id="student-course"
-                    value={course}
-                    onChange={(e) => setCourse(e.target.value)}
-                  >
-                    <option value="NIOS (Class 10 & 12)">NIOS (Class 10 &amp; Class 12)</option>
-                    <option value="BOSSE (Open Board)">BOSSE (Board of Open Schooling)</option>
-                    <option value="IGNOU (UG/PG Degrees)">IGNOU (UG/PG Degrees &amp; Diplomas)</option>
-                    <option value="Guidance College Admissions">Guidance College Admissions</option>
-                    <option value="Career Counselling">Career Counselling &amp; Mentorship</option>
-                    <option value="General Academic Support">General Academic Support</option>
-                  </select>
-                </div>
-              </div>
-
-              <div className="form-group">
-                <label>Your Rating *</label>
-                <div className="star-picker" role="radiogroup" aria-label="Select rating">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <button
-                      key={star}
-                      type="button"
-                      className={`star-pick-btn ${(hoverRating || rating) >= star ? 'active' : ''
-                        }`}
-                      onClick={() => setRating(star)}
-                      onMouseEnter={() => setHoverRating(star)}
-                      onMouseLeave={() => setHoverRating(0)}
-                      aria-label={`${star} star`}
-                    >
-                      ★
-                    </button>
-                  ))}
-                  <span className="star-picker-label">
-                    {rating === 5 && 'Outstanding (5/5)'}
-                    {rating === 4 && 'Very Good (4/5)'}
-                    {rating === 3 && 'Good (3/5)'}
-                    {rating === 2 && 'Average (2/5)'}
-                    {rating === 1 && 'Needs Improvement (1/5)'}
-                  </span>
-                </div>
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="student-review-text">
-                  Your Review / Comment * <span className="char-count">({commentText.length}/600 chars)</span>
-                </label>
-                <textarea
-                  id="student-review-text"
-                  required
-                  minLength="10"
-                  maxLength="600"
-                  rows="4"
-                  placeholder="Tell us about the counselling, admission process, board support, or study guidance you received..."
-                  value={commentText}
-                  onChange={(e) => setCommentText(e.target.value)}
-                />
-              </div>
-
-              <div className="review-form-actions">
-                <button type="submit" className="button button-maroon" disabled={isSubmitting}>
-                  {isSubmitting ? 'Publishing Review...' : 'Post Review Now ↗'}
-                </button>
-                <button
-                  type="button"
-                  className="button button-outline-maroon"
-                  onClick={() => setIsFormOpen(false)}
-                >
-                  Cancel
-                </button>
-              </div>
-            </form>
           </div>
         )}
 
@@ -523,19 +355,26 @@ export default function StudentReviews() {
             </div>
           ) : (
             filteredReviews.map((rev) => {
-              const isNewlyAdded = rev.id === justSubmittedId;
               const isDeleting = deletingId === rev.id;
 
               return (
                 <article
                   key={rev.id}
-                  className={`review-card ${isNewlyAdded ? 'new-review-highlight' : ''}`}
+                  className="review-card"
                   id={rev.id}
                 >
                   <div className="review-card-top">
                     <div className="student-profile">
                       <div className="student-avatar" aria-hidden="true">
-                        {rev.initials || getInitials(rev.name)}
+                        {rev.avatar ? (
+                          <img
+                            src={rev.avatar}
+                            alt={`${rev.name} avatar`}
+                            className="student-avatar-img"
+                          />
+                        ) : (
+                          <span>{rev.initials || getInitials(rev.name)}</span>
+                        )}
                       </div>
                       <div>
                         <div className="student-name-row">
