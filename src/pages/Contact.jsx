@@ -141,7 +141,7 @@ export default function Contact() {
                   autoComplete="tel"
                   inputMode="tel"
                   pattern="\+?[0-9 \(\)\-]{10,18}"
-                  placeholder="+91 9876543210"
+                  placeholder="+91 0000000000"
                   required
                   value={formData.phone}
                   onChange={handleChange}

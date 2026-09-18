@@ -2,10 +2,10 @@ export const institute = {
   name: 'ABTECH',
   fullName: 'ABTECH Educational & Learning Services',
   tagline: 'Educational & Learning Services',
-  phone: '+91 98300 00000',
+  phone: '+91 7980874530  /  +91 91 82729 91870',
   email: 'info@abtechlearning.in',
-  address: 'Kolkata, West Bengal, India',
-  hours: 'Monday – Saturday: 10:00 AM – 7:00 PM',
+  address: 'S N Banerjee Road, Phari Lane, Charnak, Barrackpore, West Bengal – 700120, India',
+  hours: 'Monday – Saturday | 10:00 AM – 8:00 PM',
 };
 
 export const highlights = [
