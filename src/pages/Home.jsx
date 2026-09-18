@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ContactStrip } from '../components';
+import { ContactStrip, StudentReviews } from '../components';
 import { highlights, services } from '../content';
 
 export default function Home({ onOpenInquiry }) {
@@ -242,6 +242,9 @@ export default function Home({ onOpenInquiry }) {
           ))}
         </div>
       </section>
+
+
+      <StudentReviews />
 
       <ContactStrip onOpenInquiry={onOpenInquiry} />
     </>

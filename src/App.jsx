@@ -105,15 +105,110 @@ export default function App() {
             className={menuOpen ? 'open' : ''}
             aria-label="Main navigation"
           >
-            {['Home', 'About', 'Services', 'Contact'].map((name) => (
+            <NavLink to="/" end onClick={() => setMenuOpen(false)}>
+              Home
+            </NavLink>
+
+            <NavLink to="/about" end onClick={() => setMenuOpen(false)}>
+              About
+            </NavLink>
+
+            {/* Services with Hover Dropdown Menu */}
+            <div
+              className="nav-item-dropdown"
+              onMouseEnter={() => {}}
+              onMouseLeave={() => {}}
+            >
               <NavLink
-                key={name}
-                to={name === 'Home' ? '/' : `/${name.toLowerCase()}`}
-                end
+                to="/services"
+                className={({ isActive }) =>
+                  isActive || location.pathname.startsWith('/services') ? 'active' : ''
+                }
+                onClick={() => setMenuOpen(false)}
               >
-                {name}
+                Services <span className="dropdown-caret" aria-hidden="true">▾</span>
               </NavLink>
-            ))}
+
+              <div className="nav-dropdown-menu" role="menu" aria-label="Services Submenu">
+                {[
+                  { label: 'NIOS About Us', to: '/services#nios' },
+                  { label: 'General Inquiries', to: '/contact', hasArrow: true },
+                  { label: 'Admission', to: '/services#nios', hasArrow: true },
+                  { label: 'Admission Form', action: handleOpenInquiry, isHighlight: true },
+                  { label: 'Subject List', to: '/services#nios', hasArrow: true },
+                  { label: 'Syllabus', to: '/services#nios', hasArrow: true },
+                  { label: 'Question Paper', to: '/services#nios', hasArrow: true },
+                  {
+                    label: 'Download Exam Hall Ticket / Admit Card',
+                    href: 'https://sdmis.nios.ac.in/',
+                    hasArrow: true,
+                  },
+                  {
+                    label: 'Check NIOS Admission Status',
+                    href: 'https://sdmis.nios.ac.in/home/check-admission-status',
+                    hasArrow: true,
+                  },
+                  {
+                    label: 'Check NIOS Exam Result',
+                    href: 'https://results.nios.ac.in/home/on-demand?type=2',
+                    hasArrow: true,
+                  },
+                ].map((item, idx) => {
+                  if (item.action) {
+                    return (
+                      <button
+                        key={idx}
+                        type="button"
+                        className={`dropdown-menu-item ${item.isHighlight ? 'dropdown-item-highlight' : ''}`}
+                        role="menuitem"
+                        onClick={() => {
+                          setMenuOpen(false);
+                          item.action();
+                        }}
+                      >
+                        {item.isHighlight && <span className="highlight-dash">—</span>}
+                        <span className="dropdown-item-text">{item.label}</span>
+                        {item.hasArrow && <span className="dropdown-item-arrow">›</span>}
+                      </button>
+                    );
+                  }
+
+                  if (item.href) {
+                    return (
+                      <a
+                        key={idx}
+                        href={item.href}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="dropdown-menu-item"
+                        role="menuitem"
+                        onClick={() => setMenuOpen(false)}
+                      >
+                        <span className="dropdown-item-text">{item.label}</span>
+                        {item.hasArrow && <span className="dropdown-item-arrow">›</span>}
+                      </a>
+                    );
+                  }
+
+                  return (
+                    <Link
+                      key={idx}
+                      to={item.to}
+                      className="dropdown-menu-item"
+                      role="menuitem"
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      <span className="dropdown-item-text">{item.label}</span>
+                      {item.hasArrow && <span className="dropdown-item-arrow">›</span>}
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+
+            <NavLink to="/contact" end onClick={() => setMenuOpen(false)}>
+              Contact
+            </NavLink>
 
             <button
               className="button button-header-cta"
