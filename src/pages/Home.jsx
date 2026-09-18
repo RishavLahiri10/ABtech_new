@@ -1,10 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-<<<<<<< Updated upstream
-import { ContactStrip, StudentReviews } from '../components';
-=======
-import { ContactStrip, TestimonialSlider } from '../components';
->>>>>>> Stashed changes
+import { ContactStrip, TestimonialSlider, StudentReviews } from '../components';
 import { highlights, services } from '../content';
 
 export default function Home({ onOpenInquiry }) {
