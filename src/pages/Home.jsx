@@ -1,6 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+<<<<<<< Updated upstream
 import { ContactStrip, StudentReviews } from '../components';
+=======
+import { ContactStrip, TestimonialSlider } from '../components';
+>>>>>>> Stashed changes
 import { highlights, services } from '../content';
 
 export default function Home({ onOpenInquiry }) {
@@ -199,48 +203,17 @@ export default function Home({ onOpenInquiry }) {
         </div>
       </section>
 
-      {/* Testimonials */}
-      <section className="container section">
-        <div className="section-heading">
-          <div>
-            <p className="eyebrow">SUCCESS STORIES</p>
-            <h2>A fresh start can change everything.</h2>
-          </div>
-          <p className="section-subtext">
-            Inspiring journeys of students who continued their education with ABTECH.
+      {/* Testimonials Slider Section */}
+      <section className="container section testimonials-section-wrap">
+        <div className="section-heading-center">
+          <p className="eyebrow">SUCCESS STORIES &amp; EXPERIENCES</p>
+          <h2>A Fresh Start Can Change Everything</h2>
+          <p className="lede-center">
+            Inspiring journeys of students who continued their education and secured admissions with ABTECH.
           </p>
         </div>
 
-        <div className="grid three">
-          {[
-            [
-              '“I had a gap after failing 12th standard and thought college was out of reach. ABTECH guided me through NIOS with TOC, and I cleared in the very next cycle.”',
-              'Rahul Sen',
-              'NIOS 12th Completed · Now in B.Com',
-            ],
-            [
-              '“Getting into IGNOU for my Bachelor’s while working full-time was seamless. Their assignment guidance and counselling made all the difference.”',
-              'Priya Mukherjee',
-              'IGNOU BCA Learner',
-            ],
-            [
-              '“The career counselling session cleared all my confusion regarding college streams. Highly recommend their admission guidance in Kolkata.”',
-              'Suman Das',
-              'College Admission Aspirant',
-            ],
-          ].map(([quote, name, detail], i) => (
-            <figure className="testimonial" key={i}>
-              <span className="quote-mark" aria-hidden="true">
-                “
-              </span>
-              <blockquote>{quote}</blockquote>
-              <figcaption>
-                <strong>{name}</strong>
-                <span>{detail}</span>
-              </figcaption>
-            </figure>
-          ))}
-        </div>
+        <TestimonialSlider />
       </section>
 
 
