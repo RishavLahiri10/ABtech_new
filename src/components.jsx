@@ -78,11 +78,11 @@ export function Footer() {
           <h2>Explore</h2>
           <Link to="/">Home</Link>
           <Link to="/about">About Us</Link>
-          <Link to="/services">Our Services</Link>
+          <Link to="/services">NIOS Services</Link>
           <Link to="/contact">Contact &amp; Location</Link>
         </div>
         <div>
-          <h2>Services</h2>
+          <h2>NIOS Services</h2>
           <Link to="/services#nios">NIOS (10th &amp; 12th)</Link>
           <Link to="/services#bosse">BOSSE Open Board</Link>
           <Link to="/services#ignou">IGNOU Degrees</Link>
@@ -114,7 +114,7 @@ export function Footer() {
           </span>
         </div>
         <div className="footer-developer-credit">
-          <span className="credit-label">Website Designed &amp; Maintained By</span>
+          <span className="credit-label"> Designed &amp; Maintained By</span>
           <div className="credit-brand">
             <img
               src="/bizelevate-logo.png"

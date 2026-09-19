@@ -62,7 +62,7 @@ export default function Home({ onOpenInquiry }) {
                 Inquire Now <span aria-hidden="true">↗</span>
               </button>
               <Link className="button button-outline-maroon" to="/services">
-                Explore Services →
+                Explore NIOS Services →
               </Link>
             </div>
 

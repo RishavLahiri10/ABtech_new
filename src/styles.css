@@ -279,16 +279,17 @@ header {
 nav {
   display: flex;
   align-items: center;
-  gap: 24px;
+  gap: 16px;
 }
 
 nav a {
   padding: 8px 4px;
-  font-size: 0.95rem;
+  font-size: 0.92rem;
   font-weight: 700;
   color: var(--maroon-dark);
   position: relative;
   transition: color 0.2s;
+  white-space: nowrap;
 }
 
 nav a:hover {
@@ -417,6 +418,67 @@ nav a.active::after {
 .dropdown-menu-item:hover .dropdown-item-arrow {
   color: var(--maroon);
   transform: translateX(3px);
+}
+
+/* Nested Flyout Submenu for Syllabus */
+.dropdown-submenu-wrap {
+  position: relative;
+}
+
+.dropdown-submenu {
+  position: absolute;
+  left: 98%;
+  top: -6px;
+  min-width: 230px;
+  background: var(--white);
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--maroon-border);
+  box-shadow: 0 16px 36px rgba(66, 6, 18, 0.18);
+  padding: 6px 0;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateX(8px);
+  transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1), transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.2s;
+  z-index: 1002;
+}
+
+/* Hover bridge between parent item and flyout */
+.dropdown-submenu-wrap::after {
+  content: '';
+  position: absolute;
+  right: -12px;
+  top: 0;
+  bottom: 0;
+  width: 14px;
+}
+
+.dropdown-submenu-wrap:hover .dropdown-submenu,
+.dropdown-submenu-wrap:focus-within .dropdown-submenu {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateX(0);
+}
+
+.dropdown-submenu-item {
+  padding: 10px 16px !important;
+  font-size: 0.85rem !important;
+  border-bottom: 1px solid #f8fafc;
+}
+
+@media (max-width: 900px) {
+  .dropdown-submenu {
+    position: static;
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: none;
+    box-shadow: none;
+    border: none;
+    background: #fdf6f7;
+    padding-left: 14px;
+  }
 }
 
 /* ==========================================================================
@@ -911,8 +973,146 @@ nav a.active::after {
   flex-shrink: 0;
 }
 
+.service-doc-link-wrap {
+  margin-bottom: 20px;
+  padding: 10px 14px;
+  background: var(--maroon-subtle);
+  border: 1px dashed var(--maroon-border);
+  border-radius: var(--radius-sm);
+}
+
+.service-doc-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--maroon);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 0.2s;
+}
+
+.service-doc-link:hover {
+  color: var(--maroon-dark);
+}
+
 .service-card-action {
   margin-top: auto;
+}
+
+/* ==========================================================================
+   Syllabus Section (Class X & Class XII)
+   ========================================================================== */
+
+.syllabus-section {
+  padding-top: 30px;
+}
+
+.syllabus-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 32px;
+  margin-top: 36px;
+}
+
+.syllabus-card {
+  background: var(--white);
+  border: 1.5px solid var(--maroon-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.syllabus-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--maroon);
+}
+
+.syllabus-card-header {
+  background: var(--maroon);
+  color: var(--white);
+  padding: 24px 28px;
+}
+
+.syllabus-card-header h3 {
+  color: var(--white) !important;
+  font-size: 1.45rem;
+  margin-top: 8px;
+  margin-bottom: 4px;
+}
+
+.syllabus-card-header p {
+  color: rgba(255, 255, 255, 0.9) !important;
+  font-size: 0.875rem;
+  margin-bottom: 0;
+}
+
+.syllabus-card-body {
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.syllabus-group {
+  margin-bottom: 22px;
+}
+
+.syllabus-group-title {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--maroon-dark);
+  margin-bottom: 10px;
+}
+
+.syllabus-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.syllabus-tag {
+  background: var(--maroon-subtle);
+  color: var(--maroon-dark);
+  border: 1px solid var(--maroon-border);
+  border-radius: 20px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  padding: 4px 12px;
+}
+
+.syllabus-subject-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.syllabus-subject-list li {
+  padding-block: 8px;
+  border-bottom: 1px solid var(--maroon-tint);
+  font-size: 0.875rem;
+}
+
+.syllabus-subject-list li strong {
+  display: block;
+  color: var(--maroon-dark);
+}
+
+.syllabus-subject-list li span {
+  display: block;
+  color: var(--text-muted);
+  font-size: 0.8125rem;
+  margin-top: 2px;
+}
+
+.syllabus-action-wrap {
+  margin-top: auto;
+  padding-top: 16px;
 }
 
 /* ==========================================================================
@@ -1843,7 +2043,7 @@ textarea {
   }
 }
 
-@media (max-width: 959px) {
+@media (max-width: 1060px) {
   .menu-toggle {
     display: block;
   }

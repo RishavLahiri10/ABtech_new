@@ -48,7 +48,16 @@ export default function App() {
       if (mainEl) mainEl.focus();
       previousPath.current = location.pathname;
     }
-  }, [location.pathname]);
+
+    if (location.hash) {
+      const el = document.getElementById(location.hash.slice(1));
+      if (el) {
+        setTimeout(() => {
+          el.scrollIntoView({ behavior: 'smooth' });
+        }, 150);
+      }
+    }
+  }, [location.pathname, location.hash]);
 
   function closeOnEscape(event) {
     if (event.key === 'Escape') {
@@ -60,6 +69,210 @@ export default function App() {
   const handleOpenInquiry = () => {
     setInquiryOpen(true);
     setMenuOpen(false);
+  };
+
+  const niosMenuItems = [
+    { label: 'NIOS About Us', to: '/services#nios' },
+    { label: 'General Inquiries', to: '/contact', hasArrow: true },
+    { label: 'Admission Form', action: handleOpenInquiry, hasArrow: true },
+    {
+      label: 'Subject List',
+      href: 'https://sdmis.nios.ac.in/static/dist/images/pdf/subjects-available/subjects-available.pdf',
+      hasArrow: true,
+    },
+    {
+      label: 'Syllabus',
+      hasArrow: true,
+      submenu: [
+        {
+          label: 'Class X Syllabus',
+          href: 'https://rcpune.nios.ac.in/secondary-courses-materials',
+        },
+        {
+          label: 'Class XII Syllabus',
+          href: 'https://rcpune.nios.ac.in/senior-secondary-courses-material',
+        },
+      ],
+    },
+    {
+      label: 'Download Exam Hall Ticket / Admit Card',
+      href: 'https://sdmis.nios.ac.in/search/hall-ticket',
+      hasArrow: true,
+    },
+    {
+      label: 'Check NIOS Admission Status',
+      href: 'https://sdmis.nios.ac.in/registration/check-admission-status',
+      hasArrow: true,
+    },
+    {
+      label: 'Check NIOS Exam Result',
+      href: 'https://results.nios.ac.in/home/on-demand?type=2',
+      hasArrow: true,
+    },
+  ];
+
+  const bosseMenuItems = [
+    { label: 'BOSSE About Us', to: '/services#bosse' },
+    { label: 'General Inquiries', to: '/contact', hasArrow: true },
+    { label: 'BOSSE Admission Form', action: handleOpenInquiry, hasArrow: true },
+    {
+      label: 'Official BOSSE Portal',
+      href: 'https://www.bosse.ac.in/',
+      hasArrow: true,
+    },
+    {
+      label: 'Secondary (Class 10) Info',
+      href: 'https://www.bosse.ac.in/secondary/',
+      hasArrow: true,
+    },
+    {
+      label: 'Sr. Secondary (Class 12) Info',
+      href: 'https://www.bosse.ac.in/senior-secondary/',
+      hasArrow: true,
+    },
+    {
+      label: 'Skill & Vocational Courses',
+      href: 'https://www.bosse.ac.in/vocational-education/',
+      hasArrow: true,
+    },
+    {
+      label: 'Student Verification & Results',
+      href: 'https://www.bosse.ac.in/student-verification/',
+      hasArrow: true,
+    },
+  ];
+
+  const ignouMenuItems = [
+    { label: 'IGNOU About Us', to: '/services#ignou' },
+    { label: 'General Inquiries', to: '/contact', hasArrow: true },
+    { label: 'IGNOU Admission Form', action: handleOpenInquiry, hasArrow: true },
+    {
+      label: 'Official IGNOU Portal',
+      href: 'https://www.ignou.ac.in/',
+      hasArrow: true,
+    },
+    {
+      label: 'Online Fresh Admission (Samarth)',
+      href: 'https://ignouadmission.samarth.edu.in/',
+      hasArrow: true,
+    },
+    {
+      label: 'Online Re-Registration Portal',
+      href: 'https://onlinerr.ignou.ac.in/',
+      hasArrow: true,
+    },
+    {
+      label: 'Assignments & Question Papers',
+      href: 'https://webservices.ignou.ac.in/assignments/',
+      hasArrow: true,
+    },
+    {
+      label: 'Student Grade Card & Results',
+      href: 'https://gradecard.ignou.ac.in/gradecard/',
+      hasArrow: true,
+    },
+  ];
+
+  const renderNavDropdown = (title, targetPath, items) => {
+    const isServiceActive =
+      location.pathname === '/services' &&
+      (location.hash === targetPath.slice(targetPath.indexOf('#')) ||
+        (targetPath.includes('#nios') && !location.hash));
+
+    return (
+      <div className="nav-item-dropdown" key={title}>
+        <NavLink
+          to={targetPath}
+          className={() => (isServiceActive ? 'active' : '')}
+          onClick={() => setMenuOpen(false)}
+        >
+          {title} <span className="dropdown-caret" aria-hidden="true">▾</span>
+        </NavLink>
+
+        <div className="nav-dropdown-menu" role="menu" aria-label={`${title} Submenu`}>
+          {items.map((item, idx) => {
+            if (item.submenu) {
+              return (
+                <div key={idx} className="dropdown-submenu-wrap">
+                  <div
+                    className="dropdown-menu-item dropdown-submenu-trigger"
+                    role="menuitem"
+                    tabIndex="0"
+                  >
+                    <span className="dropdown-item-text">{item.label}</span>
+                    <span className="dropdown-item-arrow">›</span>
+                  </div>
+                  <div className="dropdown-submenu" role="menu" aria-label={`${item.label} Submenu`}>
+                    {item.submenu.map((sub, sIdx) => (
+                      <a
+                        key={sIdx}
+                        href={sub.href}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="dropdown-menu-item dropdown-submenu-item"
+                        role="menuitem"
+                        onClick={() => setMenuOpen(false)}
+                      >
+                        <span className="dropdown-item-text">{sub.label}</span>
+                        <span className="dropdown-item-arrow">›</span>
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              );
+            }
+
+            if (item.action) {
+              return (
+                <button
+                  key={idx}
+                  type="button"
+                  className="dropdown-menu-item"
+                  role="menuitem"
+                  onClick={() => {
+                    setMenuOpen(false);
+                    item.action();
+                  }}
+                >
+                  <span className="dropdown-item-text">{item.label}</span>
+                  {item.hasArrow && <span className="dropdown-item-arrow">›</span>}
+                </button>
+              );
+            }
+
+            if (item.href) {
+              return (
+                <a
+                  key={idx}
+                  href={item.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="dropdown-menu-item"
+                  role="menuitem"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  <span className="dropdown-item-text">{item.label}</span>
+                  {item.hasArrow && <span className="dropdown-item-arrow">›</span>}
+                </a>
+              );
+            }
+
+            return (
+              <Link
+                key={idx}
+                to={item.to}
+                className="dropdown-menu-item"
+                role="menuitem"
+                onClick={() => setMenuOpen(false)}
+              >
+                <span className="dropdown-item-text">{item.label}</span>
+                {item.hasArrow && <span className="dropdown-item-arrow">›</span>}
+              </Link>
+            );
+          })}
+        </div>
+      </div>
+    );
   };
 
   return (
@@ -112,97 +325,9 @@ export default function App() {
               About
             </NavLink>
 
-            {/* Services with Hover Dropdown Menu */}
-            <div
-              className="nav-item-dropdown"
-              onMouseEnter={() => {}}
-              onMouseLeave={() => {}}
-            >
-              <NavLink
-                to="/services"
-                className={({ isActive }) =>
-                  isActive || location.pathname.startsWith('/services') ? 'active' : ''
-                }
-                onClick={() => setMenuOpen(false)}
-              >
-                Services <span className="dropdown-caret" aria-hidden="true">▾</span>
-              </NavLink>
-
-              <div className="nav-dropdown-menu" role="menu" aria-label="Services Submenu">
-                {[
-                  { label: 'NIOS About Us', to: '/services#nios' },
-                  { label: 'General Inquiries', to: '/contact', hasArrow: true },
-                
-                  { label: 'Admission Form', action: handleOpenInquiry, hasArrow: true },
-                  { label: 'Subject List', to: '/services#nios', hasArrow: true },
-                  { label: 'Syllabus', to: '/services#nios', hasArrow: true },
-                  { label: 'Question Paper', to: '/services#nios', hasArrow: true },
-                  {
-                    label: 'Download Exam Hall Ticket / Admit Card',
-                    href: 'https://sdmis.nios.ac.in/',
-                    hasArrow: true,
-                  },
-                  {
-                    label: 'Check NIOS Admission Status',
-                    href: 'https://sdmis.nios.ac.in/home/check-admission-status',
-                    hasArrow: true,
-                  },
-                  {
-                    label: 'Check NIOS Exam Result',
-                    href: 'https://results.nios.ac.in/home/on-demand?type=2',
-                    hasArrow: true,
-                  },
-                ].map((item, idx) => {
-                  if (item.action) {
-                    return (
-                      <button
-                        key={idx}
-                        type="button"
-                        className="dropdown-menu-item"
-                        role="menuitem"
-                        onClick={() => {
-                          setMenuOpen(false);
-                          item.action();
-                        }}
-                      >
-                        <span className="dropdown-item-text">{item.label}</span>
-                        {item.hasArrow && <span className="dropdown-item-arrow">›</span>}
-                      </button>
-                    );
-                  }
-
-                  if (item.href) {
-                    return (
-                      <a
-                        key={idx}
-                        href={item.href}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="dropdown-menu-item"
-                        role="menuitem"
-                        onClick={() => setMenuOpen(false)}
-                      >
-                        <span className="dropdown-item-text">{item.label}</span>
-                        {item.hasArrow && <span className="dropdown-item-arrow">›</span>}
-                      </a>
-                    );
-                  }
-
-                  return (
-                    <Link
-                      key={idx}
-                      to={item.to}
-                      className="dropdown-menu-item"
-                      role="menuitem"
-                      onClick={() => setMenuOpen(false)}
-                    >
-                      <span className="dropdown-item-text">{item.label}</span>
-                      {item.hasArrow && <span className="dropdown-item-arrow">›</span>}
-                    </Link>
-                  );
-                })}
-              </div>
-            </div>
+            {renderNavDropdown('NIOS Services', '/services#nios', niosMenuItems)}
+            {renderNavDropdown('BOSSE Services', '/services#bosse', bosseMenuItems)}
+            {renderNavDropdown('IGNOU Services', '/services#ignou', ignouMenuItems)}
 
             <NavLink to="/contact" end onClick={() => setMenuOpen(false)}>
               Contact
