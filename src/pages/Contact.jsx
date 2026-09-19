@@ -31,12 +31,17 @@ export default function Contact() {
     setIsSuccess(false);
 
     try {
-      const response = await fetch('https://abtech.byte4ge.shop/api/V1/contact.php', {
+      const response = await fetch('https://api.web3forms.com/submit', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'application/json',
         },
         body: JSON.stringify({
+          access_key: 'e6072117-2805-49ea-b544-8f319e50a0a4',
+          subject: `New Contact Inquiry: ${formData.name} (${formData.course})`,
+          from_name: 'ABTECH Contact Page',
+          recipient: 'bizelevate.ez@gmail.com',
           name: formData.name,
           email: formData.email,
           phone: formData.phone,
@@ -47,7 +52,7 @@ export default function Contact() {
 
       const result = await response.json();
 
-      if (result.status === 'success') {
+      if (result.success || result.status === 'success') {
         setIsSuccess(true);
         setStatus('Thank you! Your inquiry has been submitted successfully. Our admission team will contact you shortly.');
         setFormData({
