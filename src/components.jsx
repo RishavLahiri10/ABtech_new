@@ -242,7 +242,7 @@ export function AdmissionInquiryModal({ isOpen, onClose }) {
           <p className="modal-eyebrow">ABTECH LEARNING SERVICES</p>
           <h2 className="modal-title">ADMISSION INQUIRY</h2>
           <p className="modal-subtitle">
-            Get instant counselling, eligibility checks, and fee details for 2026-2027 admissions.
+            Get instant counselling, eligibility checks, and fee details for 2026–2027 admissions.
           </p>
         </div>
 
