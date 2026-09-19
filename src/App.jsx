@@ -81,7 +81,6 @@ export default function App() {
             >
               Get Admission Guidance ↗
             </button>
-            <Link to="/contact">Helpdesk</Link>
           </div>
         </div>
       </div>
@@ -132,23 +131,26 @@ export default function App() {
               <div className="nav-dropdown-menu" role="menu" aria-label="Services Submenu">
                 {[
                   { label: 'NIOS About Us', to: '/services#nios' },
-                  { label: 'General Inquiries', to: '/contact' },
-                  { label: 'Admission', to: '/services#nios' },
-                  { label: 'Admission Form', action: handleOpenInquiry },
-                  { label: 'Subject List', to: '/services#nios' },
-                  { label: 'Syllabus', to: '/services#nios' },
-                  { label: 'Question Paper', to: '/services#nios' },
+                  { label: 'General Inquiries', to: '/contact', hasArrow: true },
+                
+                  { label: 'Admission Form', action: handleOpenInquiry, hasArrow: true },
+                  { label: 'Subject List', to: '/services#nios', hasArrow: true },
+                  { label: 'Syllabus', to: '/services#nios', hasArrow: true },
+                  { label: 'Question Paper', to: '/services#nios', hasArrow: true },
                   {
                     label: 'Download Exam Hall Ticket / Admit Card',
                     href: 'https://sdmis.nios.ac.in/',
+                    hasArrow: true,
                   },
                   {
                     label: 'Check NIOS Admission Status',
                     href: 'https://sdmis.nios.ac.in/home/check-admission-status',
+                    hasArrow: true,
                   },
                   {
                     label: 'Check NIOS Exam Result',
                     href: 'https://results.nios.ac.in/home/on-demand?type=2',
+                    hasArrow: true,
                   },
                 ].map((item, idx) => {
                   if (item.action) {
@@ -164,7 +166,7 @@ export default function App() {
                         }}
                       >
                         <span className="dropdown-item-text">{item.label}</span>
-                        <span className="dropdown-item-arrow" aria-hidden="true">›</span>
+                        {item.hasArrow && <span className="dropdown-item-arrow">›</span>}
                       </button>
                     );
                   }
@@ -181,7 +183,7 @@ export default function App() {
                         onClick={() => setMenuOpen(false)}
                       >
                         <span className="dropdown-item-text">{item.label}</span>
-                        <span className="dropdown-item-arrow" aria-hidden="true">›</span>
+                        {item.hasArrow && <span className="dropdown-item-arrow">›</span>}
                       </a>
                     );
                   }
@@ -195,7 +197,7 @@ export default function App() {
                       onClick={() => setMenuOpen(false)}
                     >
                       <span className="dropdown-item-text">{item.label}</span>
-                      <span className="dropdown-item-arrow" aria-hidden="true">›</span>
+                      {item.hasArrow && <span className="dropdown-item-arrow">›</span>}
                     </Link>
                   );
                 })}

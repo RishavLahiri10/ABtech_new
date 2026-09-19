@@ -179,18 +179,21 @@ p {
 }
 
 .topbar-btn {
-  background: var(--white);
-  color: var(--maroon-dark);
+  background: none;
+  color: var(--white);
   border: none;
-  font-size: 0.75rem;
-  font-weight: 800;
-  padding: 4px 10px;
-  border-radius: var(--radius-sm);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  font-family: inherit;
+  padding: 0;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
   transition: opacity 0.2s;
 }
 
 .topbar-btn:hover {
-  opacity: 0.9;
+  opacity: 0.8;
 }
 
 /* ==========================================================================
@@ -400,22 +403,6 @@ nav a.active::after {
 .dropdown-menu-item:hover .dropdown-item-arrow {
   color: var(--maroon);
   transform: translateX(3px);
-}
-
-.dropdown-item-highlight {
-  color: #0d9488 !important;
-  font-weight: 700 !important;
-}
-
-.dropdown-item-highlight:hover {
-  background-color: #f0fdfa;
-  color: #0f766e !important;
-}
-
-.highlight-dash {
-  color: #0d9488;
-  margin-right: 6px;
-  font-weight: 800;
 }
 
 /* ==========================================================================
@@ -1518,14 +1505,28 @@ textarea {
 .inquiry-modal-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(66, 6, 18, 0.72);
-  backdrop-filter: blur(5px);
+  background: rgba(15, 20, 30, 0.72);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
   z-index: 1000;
   display: grid;
   place-items: center;
   padding: 16px;
   overflow-y: auto;
   animation: modalFadeIn 0.3s ease-out;
+}
+
+.inquiry-modal-backdrop::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url('/logo.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: min(520px, 75vw);
+  opacity: 0.25;
+  pointer-events: none;
+  z-index: 0;
 }
 
 @keyframes modalFadeIn {
@@ -1542,8 +1543,9 @@ textarea {
   width: min(560px, 100%);
   border-radius: var(--radius-lg);
   border: 2px solid var(--maroon-border);
-  box-shadow: 0 24px 80px rgba(66, 6, 18, 0.4);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
   position: relative;
+  z-index: 1;
   overflow: hidden;
   animation: modalSlideUp 0.35s ease-out;
 }
