@@ -39,8 +39,8 @@ export default function Home({ onOpenInquiry }) {
 
         <div className="container hero-grid">
           <div className="hero-content">
-            <p className="eyebrow hero-eyebrow">
-              <span className="short-line" /> ADMISSION GUIDANCE &amp; COUNSELLING · KOLKATA
+            <p className="eyebrow">
+              ADMISSION GUIDANCE &amp; COUNSELLING · BARRACKPORE
             </p>
             <h1 className="hero-title">
               Your Education.
