@@ -117,11 +117,9 @@ export default function Contact() {
 
         <div className="contact-form-col">
           <form className="inquiry-form" onSubmit={submit}>
-            <div className="form-header-badge">
-              <span className="badge badge-accent">ADMISSION INQUIRY FORM</span>
-            </div>
+            
             <h2>Send Us Your Details</h2>
-            <p className="small">All fields marked * are required.</p>
+            <p className="small">All fields marked are required.</p>
 
             <label htmlFor="name">Full Name *</label>
             <input
