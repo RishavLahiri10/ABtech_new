@@ -90,7 +90,7 @@ export function Footer() {
           <Link to="/services#career-counselling">Career Counselling</Link>
         </div>
         <div>
-          <h2>Contact Kolkata Office</h2>
+          <h2>Contact Barrackpore Office</h2>
           <address>
             <strong>{institute.fullName}</strong>
             <br />
@@ -100,7 +100,7 @@ export function Footer() {
             <br />
             Mail : info@abtechedu.com
             <br />
-           <span> Counselling Hours : Monday-Saturday | 10:00AM - 8:00PM</span>
+            <span> Counselling Hours : Monday-Saturday | 10:00AM - 8:00PM</span>
           </address>
         </div>
       </div>

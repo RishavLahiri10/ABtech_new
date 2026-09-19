@@ -1505,34 +1505,15 @@ textarea {
 .inquiry-modal-backdrop {
   position: fixed;
   inset: 0;
-<<<<<<< HEAD
-  background: rgba(15, 20, 30, 0.72);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-=======
   background: rgba(66, 6, 18, 0.72);
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
->>>>>>> 8a7299b6215bcb40b099a66e149921db56bc41c1
   z-index: 1000;
   display: grid;
   place-items: center;
   padding: 16px;
   overflow-y: auto;
   animation: modalFadeIn 0.3s ease-out;
-}
-
-.inquiry-modal-backdrop::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background-image: url('/logo.png');
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: min(520px, 75vw);
-  opacity: 0.25;
-  pointer-events: none;
-  z-index: 0;
 }
 
 @keyframes modalFadeIn {
@@ -1545,20 +1526,11 @@ textarea {
 }
 
 .inquiry-modal-content {
-<<<<<<< HEAD
   background: var(--white);
-  width: min(560px, 100%);
-  border-radius: var(--radius-lg);
-  border: 2px solid var(--maroon-border);
-  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
-=======
-  background: #ffffff;
-  width: min(520px, 92vw);
+  width: min(540px, 94vw);
   border-radius: 16px;
   box-shadow: 0 24px 70px rgba(0, 0, 0, 0.45);
->>>>>>> 8a7299b6215bcb40b099a66e149921db56bc41c1
   position: relative;
-  z-index: 1;
   overflow: hidden;
   z-index: 1;
   animation: modalSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
