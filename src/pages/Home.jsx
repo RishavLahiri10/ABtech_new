@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ContactStrip, TestimonialSlider, StudentReviews } from '../components';
+import { ContactStrip, StudentReviews } from '../components';
 import { highlights, services } from '../content';
 
 export default function Home({ onOpenInquiry }) {
@@ -199,20 +199,7 @@ export default function Home({ onOpenInquiry }) {
         </div>
       </section>
 
-      {/* Testimonials Slider Section */}
-      <section className="container section testimonials-section-wrap">
-        <div className="section-heading-center">
-          <p className="eyebrow">SUCCESS STORIES &amp; EXPERIENCES</p>
-          <h2>A Fresh Start Can Change Everything</h2>
-          <p className="lede-center">
-            Inspiring journeys of students who continued their education and secured admissions with ABTECH.
-          </p>
-        </div>
-
-        <TestimonialSlider />
-      </section>
-
-
+      {/* Student Reviews Section */}
       <StudentReviews />
 
       <ContactStrip onOpenInquiry={onOpenInquiry} />
