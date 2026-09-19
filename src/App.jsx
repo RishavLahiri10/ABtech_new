@@ -81,7 +81,6 @@ export default function App() {
             >
               Get Admission Guidance ↗
             </button>
-            <Link to="/contact">Helpdesk</Link>
           </div>
         </div>
       </div>
