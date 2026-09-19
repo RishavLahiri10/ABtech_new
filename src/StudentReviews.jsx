@@ -102,18 +102,6 @@ export default function StudentReviews() {
   const [successToast, setSuccessToast] = useState('');
   const [errorToast, setErrorToast] = useState('');
 
-  // Admin Mode State
-  const [isAdmin, setIsAdmin] = useState(() => {
-    return Boolean(sessionStorage.getItem('abtech_admin_authenticated'));
-  });
-  const [adminKey, setAdminKey] = useState(() => {
-    return sessionStorage.getItem('abtech_admin_key') || '';
-  });
-  const [showAdminLogin, setShowAdminLogin] = useState(false);
-  const [adminPasswordInput, setAdminPasswordInput] = useState('');
-  const [adminLoginError, setAdminLoginError] = useState('');
-  const [deletingId, setDeletingId] = useState(null);
-
   // 1. Fetch reviews from Central Database on Mount
   const fetchReviewsFromBackend = useCallback(async () => {
     try {
@@ -160,75 +148,6 @@ export default function StudentReviews() {
     }
   }, [reviews]);
 
-  // 2. Admin Login Handler
-  const handleAdminLogin = (e) => {
-    e.preventDefault();
-    if (adminPasswordInput.trim() === 'abtech@admin2026') {
-      setIsAdmin(true);
-      setAdminKey(adminPasswordInput.trim());
-      sessionStorage.setItem('abtech_admin_authenticated', 'true');
-      sessionStorage.setItem('abtech_admin_key', adminPasswordInput.trim());
-      setShowAdminLogin(false);
-      setAdminPasswordInput('');
-      setAdminLoginError('');
-      setSuccessToast('Admin Mode Active: You can now delete or moderate reviews.');
-      setTimeout(() => setSuccessToast(''), 4000);
-    } else {
-      setAdminLoginError('Incorrect Admin Password. Please try again.');
-    }
-  };
-
-  const handleAdminLogout = () => {
-    setIsAdmin(false);
-    setAdminKey('');
-    sessionStorage.removeItem('abtech_admin_authenticated');
-    sessionStorage.removeItem('abtech_admin_key');
-    setSuccessToast('Admin Mode Deactivated.');
-    setTimeout(() => setSuccessToast(''), 3000);
-  };
-
-  // 3. Admin Delete Review (Permanent Removal from Database)
-  const handleDeleteReview = async (id, studentName) => {
-    const confirmDelete = window.confirm(
-      `Are you sure you want to permanently delete the review from "${studentName}"? This action cannot be undone.`
-    );
-    if (!confirmDelete) return;
-
-    setDeletingId(id);
-
-    try {
-      const response = await fetch(API_URL, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Admin-Key': adminKey || 'abtech@admin2026',
-        },
-        body: JSON.stringify({
-          action: 'delete',
-          id: id,
-          admin_key: adminKey || 'abtech@admin2026',
-        }),
-      });
-
-      const resData = await response.json();
-
-      if (resData.success || resData.status === 'success' || response.ok) {
-        setReviews((prev) => prev.filter((r) => r.id !== id));
-        setSuccessToast(`Review from "${studentName}" was deleted permanently.`);
-        fetchReviewsFromBackend();
-      } else {
-        setReviews((prev) => prev.filter((r) => r.id !== id));
-        setSuccessToast(`Review deleted locally.`);
-      }
-    } catch {
-      setReviews((prev) => prev.filter((r) => r.id !== id));
-      setSuccessToast(`Review deleted from display.`);
-    } finally {
-      setDeletingId(null);
-      setTimeout(() => setSuccessToast(''), 4000);
-    }
-  };
-
   // Filtered & Sorted reviews
   const filteredReviews = reviews
     .filter((r) => {
@@ -252,23 +171,6 @@ export default function StudentReviews() {
   return (
     <section className="student-reviews-section" id="reviews" aria-labelledby="reviews-heading">
       <div className="container">
-
-        {/* Admin Mode Status Banner */}
-        {isAdmin && (
-          <div className="admin-status-banner">
-            <div className="admin-status-text">
-              <span className="admin-badge-icon">🛡</span>
-              <strong>Admin Mode Enabled:</strong> You have moderation permissions to permanently delete reviews.
-            </div>
-            <button
-              type="button"
-              className="button button-outline-white btn-admin-logout"
-              onClick={handleAdminLogout}
-            >
-              Exit Admin Mode ✕
-            </button>
-          </div>
-        )}
 
         {/* Section Heading & Aggregate Score */}
         <div className="reviews-header-wrap">
@@ -355,8 +257,6 @@ export default function StudentReviews() {
             </div>
           ) : (
             filteredReviews.map((rev) => {
-              const isDeleting = deletingId === rev.id;
-
               return (
                 <article
                   key={rev.id}
@@ -403,19 +303,6 @@ export default function StudentReviews() {
                   <div className="review-card-footer">
                     <div className="footer-left-actions">
                       <span className="review-loc-tag">ABTECH Kolkata</span>
-
-                      {/* Admin Delete Action */}
-                      {isAdmin && (
-                        <button
-                          type="button"
-                          className="admin-delete-btn"
-                          onClick={() => handleDeleteReview(rev.id, rev.name)}
-                          disabled={isDeleting}
-                          title="Permanently delete this review from the central database"
-                        >
-                          {isDeleting ? 'Deleting...' : '🗑 Delete'}
-                        </button>
-                      )}
                     </div>
                   </div>
                 </article>
@@ -423,70 +310,6 @@ export default function StudentReviews() {
             })
           )}
         </div>
-
-        {/* Admin Login Modal / Trigger */}
-        <div className="admin-trigger-wrap">
-          {!isAdmin ? (
-            <button
-              type="button"
-              className="admin-login-link-btn"
-              onClick={() => setShowAdminLogin(true)}
-            >
-              🔒 Admin Moderation Login
-            </button>
-          ) : (
-            <span className="admin-logged-in-label">
-              ✓ Logged in as Administrator (<button type="button" className="link-inline" onClick={handleAdminLogout}>Logout</button>)
-            </span>
-          )}
-        </div>
-
-        {/* Admin Login Dialog Modal */}
-        {showAdminLogin && (
-          <div className="inquiry-modal-backdrop" onClick={() => setShowAdminLogin(false)}>
-            <div className="admin-login-modal-box" onClick={(e) => e.stopPropagation()}>
-              <button
-                className="modal-close-btn"
-                type="button"
-                onClick={() => setShowAdminLogin(false)}
-              >
-                ✕
-              </button>
-              <div className="admin-modal-header">
-                <span className="admin-lock-icon">🔒</span>
-                <h3>Admin Review Moderation</h3>
-                <p>Enter the administrator password to manage and delete reviews.</p>
-              </div>
-
-              <form onSubmit={handleAdminLogin} className="admin-login-form">
-                <div className="form-group">
-                  <label htmlFor="admin-pass">Admin Password</label>
-                  <input
-                    id="admin-pass"
-                    type="password"
-                    required
-                    placeholder="Enter admin password"
-                    value={adminPasswordInput}
-                    onChange={(e) => setAdminPasswordInput(e.target.value)}
-                    autoFocus
-                  />
-                </div>
-
-                {adminLoginError && (
-                  <p className="modal-status-error" role="alert">
-                    {adminLoginError}
-                  </p>
-                )}
-
-                <div className="review-form-actions">
-                  <button type="submit" className="button button-maroon button-block">
-                    Unlock Admin Mode 🔓
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-        )}
 
       </div>
     </section>
