@@ -7,7 +7,12 @@ import {
   Routes,
   useLocation,
 } from 'react-router-dom';
-import { Brand, Footer, AdmissionInquiryModal } from './components';
+import {
+  Brand,
+  Footer,
+  AdmissionInquiryModal,
+  FloatingContactButtons,
+} from './components';
 import { institute } from './content';
 import Home from './pages/Home';
 import About from './pages/About';
@@ -460,6 +465,8 @@ export default function App() {
         }}
         config={inquiryConfig}
       />
+
+      <FloatingContactButtons />
     </>
   );
 }

@@ -410,3 +410,60 @@ export function AdmissionInquiryModal({ isOpen, onClose, config }) {
     </div>
   );
 }
+
+export function FloatingContactButtons() {
+  const whatsappNumber = '917980874530';
+  const callNumber = '+917980874530';
+  const defaultMessage = encodeURIComponent('Hello ABTECH, I would like to inquire about admissions and courses.');
+
+  return (
+    <div className="floating-contact-wrap" role="region" aria-label="Quick WhatsApp and Phone Contact">
+      {/* Direct Call Button */}
+      <a
+        href={`tel:${callNumber}`}
+        className="floating-btn floating-btn-call"
+        aria-label="Call ABTECH Counsellor (+91 7980874530)"
+        title="Call Us Now (+91 7980874530)"
+      >
+        <span className="floating-tooltip">Call Us: +91 7980874530</span>
+        <svg
+          className="floating-icon"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2.2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+        </svg>
+      </a>
+
+      {/* WhatsApp Button */}
+      <a
+        href={`https://wa.me/${whatsappNumber}?text=${defaultMessage}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="floating-btn floating-btn-whatsapp"
+        aria-label="Chat with ABTECH on WhatsApp"
+        title="Chat on WhatsApp"
+      >
+        <span className="floating-tooltip">Chat on WhatsApp</span>
+        <span className="floating-pulse-ring" aria-hidden="true"></span>
+        <svg
+          className="floating-icon"
+          width="26"
+          height="26"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          aria-hidden="true"
+        >
+          <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.36 3.45 16.86L2.05 22L7.3 20.63C8.75 21.41 10.38 21.82 12.04 21.82C17.5 21.82 21.95 17.37 21.95 11.91C21.95 6.45 17.5 2 12.04 2ZM12.04 20.13C10.53 20.13 9.07 19.72 7.8 18.96L7.49 18.78L4.38 19.6L5.21 16.57L5.01 16.25C4.19 14.93 3.75 13.44 3.75 11.91C3.75 7.34 7.47 3.62 12.04 3.62C16.61 3.62 20.33 7.34 20.33 11.91C20.33 16.48 16.61 20.13 12.04 20.13ZM16.61 14.39C16.36 14.26 15.13 13.66 14.9 13.58C14.67 13.49 14.51 13.45 14.34 13.7C14.18 13.95 13.7 14.51 13.55 14.68C13.41 14.85 13.26 14.87 13.01 14.74C12.76 14.62 11.97 14.36 11.02 13.52C10.29 12.87 9.8 12.07 9.65 11.82C9.5 11.57 9.63 11.44 9.76 11.31C9.87 11.2 10.01 11.02 10.13 10.88C10.26 10.73 10.3 10.63 10.38 10.46C10.46 10.3 10.42 10.15 10.36 10.03C10.3 9.9 9.81 8.7 9.61 8.2C9.41 7.72 9.21 7.78 9.06 7.77C8.92 7.77 8.75 7.76 8.59 7.76C8.42 7.76 8.16 7.82 7.93 8.07C7.71 8.32 7.07 8.91 7.07 10.13C7.07 11.35 7.95 12.52 8.08 12.69C8.2 12.86 9.83 15.36 12.31 16.43C12.9 16.69 13.36 16.84 13.72 16.95C14.32 17.14 14.86 17.11 15.29 17.05C15.77 16.98 16.77 16.44 16.98 15.86C17.18 15.27 17.18 14.77 17.12 14.67C17.06 14.57 16.86 14.51 16.61 14.39Z" />
+        </svg>
+      </a>
+    </div>
+  );
+}
