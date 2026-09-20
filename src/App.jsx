@@ -16,6 +16,7 @@ import Contact from './pages/Contact';
 
 export default function App() {
   const [inquiryOpen, setInquiryOpen] = useState(false);
+  const [inquiryConfig, setInquiryConfig] = useState(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const location = useLocation();
   const previousPath = useRef(location.pathname);
@@ -26,6 +27,13 @@ export default function App() {
     const hasSeenPopup = sessionStorage.getItem('abtech_inquiry_prompted');
     if (!hasSeenPopup) {
       const timer = setTimeout(() => {
+        setInquiryConfig({
+          formName: 'Admission Inquiry',
+          title: 'ADMISSION INQUIRY',
+          eyebrow: 'ABTECH LEARNING SERVICES',
+          subtitle: 'Get instant counselling, eligibility checks, and fee details for 2026–2027 admissions.',
+          course: 'NIOS — Class 10 & 12',
+        });
         setInquiryOpen(true);
         sessionStorage.setItem('abtech_inquiry_prompted', 'true');
       }, 9000);
@@ -66,15 +74,46 @@ export default function App() {
     }
   }
 
-  const handleOpenInquiry = () => {
+  const handleOpenInquiry = (customConfig = null) => {
+    setInquiryConfig(
+      customConfig || {
+        formName: 'Admission Inquiry',
+        title: 'ADMISSION INQUIRY',
+        eyebrow: 'ABTECH LEARNING SERVICES',
+        subtitle: 'Get instant counselling, eligibility checks, and fee details for 2026–2027 admissions.',
+        course: 'NIOS — Class 10 & 12',
+      }
+    );
     setInquiryOpen(true);
     setMenuOpen(false);
   };
 
   const niosMenuItems = [
     { label: 'NIOS About Us', to: '/services#nios' },
-    { label: 'General Inquiries', to: '/contact', hasArrow: true },
-    { label: 'Admission Form', action: handleOpenInquiry, hasArrow: true },
+    {
+      label: 'General Inquiries',
+      action: () =>
+        handleOpenInquiry({
+          formName: 'NIOS General Inquiry',
+          title: 'NIOS GENERAL INQUIRY',
+          eyebrow: 'ABTECH LEARNING SERVICES · NIOS',
+          subtitle: 'Get answers regarding NIOS Class 10 & 12 eligibility, TOC, exam cycles, and study centers.',
+          course: 'NIOS — Class 10 & 12',
+        }),
+      hasArrow: true,
+    },
+    {
+      label: 'Admission Form',
+      action: () =>
+        handleOpenInquiry({
+          formName: 'NIOS Admission Form',
+          title: 'NIOS ADMISSION FORM',
+          eyebrow: 'ABTECH LEARNING SERVICES · NIOS',
+          subtitle: 'Apply for NIOS Secondary & Senior Secondary 2026–2027 admission cycles.',
+          course: 'NIOS — Class 10 & 12',
+        }),
+      hasArrow: true,
+    },
     {
       label: 'Subject List',
       href: 'https://sdmis.nios.ac.in/static/dist/images/pdf/subjects-available/subjects-available.pdf',
@@ -113,8 +152,30 @@ export default function App() {
 
   const bosseMenuItems = [
     { label: 'BOSSE About Us', to: '/services#bosse' },
-    { label: 'General Inquiries', to: '/contact', hasArrow: true },
-    { label: 'BOSSE Admission Form', action: handleOpenInquiry, hasArrow: true },
+    {
+      label: 'General Inquiries',
+      action: () =>
+        handleOpenInquiry({
+          formName: 'BOSSE General Inquiry',
+          title: 'BOSSE GENERAL INQUIRY',
+          eyebrow: 'ABTECH LEARNING SERVICES · BOSSE',
+          subtitle: 'Get expert guidance and eligibility assessment for BOSSE Open Schooling & Skill Education.',
+          course: 'BOSSE — Open Board',
+        }),
+      hasArrow: true,
+    },
+    {
+      label: 'BOSSE Admission Form',
+      action: () =>
+        handleOpenInquiry({
+          formName: 'BOSSE Admission Form',
+          title: 'BOSSE ADMISSION FORM',
+          eyebrow: 'ABTECH LEARNING SERVICES · BOSSE',
+          subtitle: 'Direct registration, verification, and fast-track guidance for BOSSE Secondary & Sr. Secondary.',
+          course: 'BOSSE — Open Board',
+        }),
+      hasArrow: true,
+    },
     {
       label: 'Official BOSSE Portal',
       href: 'https://www.bosse.ac.in/',
@@ -144,8 +205,30 @@ export default function App() {
 
   const ignouMenuItems = [
     { label: 'IGNOU About Us', to: '/services#ignou' },
-    { label: 'General Inquiries', to: '/contact', hasArrow: true },
-    { label: 'IGNOU Admission Form', action: handleOpenInquiry, hasArrow: true },
+    {
+      label: 'General Inquiries',
+      action: () =>
+        handleOpenInquiry({
+          formName: 'IGNOU General Inquiry',
+          title: 'IGNOU GENERAL INQUIRY',
+          eyebrow: 'ABTECH LEARNING SERVICES · IGNOU',
+          subtitle: 'Inquire about IGNOU Bachelor’s, Master’s, Diploma programs, and assignment guidance.',
+          course: 'IGNOU — Degree & Diploma',
+        }),
+      hasArrow: true,
+    },
+    {
+      label: 'IGNOU Admission Form',
+      action: () =>
+        handleOpenInquiry({
+          formName: 'IGNOU Admission Form',
+          title: 'IGNOU ADMISSION FORM',
+          eyebrow: 'ABTECH LEARNING SERVICES · IGNOU',
+          subtitle: 'Admissions, re-registration, project synopsis, and exam assistance for IGNOU degrees.',
+          course: 'IGNOU — Degree & Diploma',
+        }),
+      hasArrow: true,
+    },
     {
       label: 'Official IGNOU Portal',
       href: 'https://www.ignou.ac.in/',
@@ -371,7 +454,11 @@ export default function App() {
 
       <AdmissionInquiryModal
         isOpen={inquiryOpen}
-        onClose={() => setInquiryOpen(false)}
+        onClose={() => {
+          setInquiryOpen(false);
+          setInquiryConfig(null);
+        }}
+        config={inquiryConfig}
       />
     </>
   );

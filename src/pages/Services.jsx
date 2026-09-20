@@ -2,6 +2,23 @@ import { PageHeader, ContactStrip } from '../components';
 import { services } from '../content';
 
 export default function Services({ onOpenInquiry }) {
+  const getServiceCourse = (id) => {
+    switch (id) {
+      case 'nios':
+        return 'NIOS — Class 10 & 12';
+      case 'bosse':
+        return 'BOSSE — Open Board';
+      case 'ignou':
+        return 'IGNOU — Degree & Diploma';
+      case 'college-admissions':
+        return 'Guidance College Admissions';
+      case 'career-counselling':
+        return 'Career Counselling';
+      default:
+        return 'NIOS — Class 10 & 12';
+    }
+  };
+
   return (
     <>
       <PageHeader
@@ -21,7 +38,15 @@ export default function Services({ onOpenInquiry }) {
           <button
             className="button button-maroon"
             type="button"
-            onClick={onOpenInquiry}
+            onClick={() =>
+              onOpenInquiry({
+                formName: 'General Admission Guidance',
+                title: 'GENERAL ADMISSION GUIDANCE',
+                eyebrow: 'ABTECH LEARNING SERVICES',
+                subtitle: 'Connect with a certified counsellor for personalized academic & career guidance.',
+                course: 'General Admission Guidance',
+              })
+            }
           >
             Speak to a Counsellor ↗
           </button>
@@ -69,7 +94,15 @@ export default function Services({ onOpenInquiry }) {
                   <button
                     className="button button-maroon button-block"
                     type="button"
-                    onClick={onOpenInquiry}
+                    onClick={() =>
+                      onOpenInquiry({
+                        formName: `${service.shortName} Inquiry`,
+                        title: `${service.shortName.toUpperCase()} INQUIRY`,
+                        eyebrow: `ABTECH LEARNING SERVICES · ${service.shortName}`,
+                        subtitle: `Get customized counselling, eligibility, and fee details for ${service.title}.`,
+                        course: getServiceCourse(service.id),
+                      })
+                    }
                   >
                     Inquire for {service.shortName} ↗
                   </button>

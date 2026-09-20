@@ -22,6 +22,23 @@ export default function Home({ onOpenInquiry }) {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const getServiceCourse = (id) => {
+    switch (id) {
+      case 'nios':
+        return 'NIOS — Class 10 & 12';
+      case 'bosse':
+        return 'BOSSE — Open Board';
+      case 'ignou':
+        return 'IGNOU — Degree & Diploma';
+      case 'college-admissions':
+        return 'Guidance College Admissions';
+      case 'career-counselling':
+        return 'Career Counselling';
+      default:
+        return 'NIOS — Class 10 & 12';
+    }
+  };
+
   return (
     <>
       {/* Hero Section with Parallax Elements */}
@@ -57,7 +74,15 @@ export default function Home({ onOpenInquiry }) {
               <button
                 className="button button-maroon"
                 type="button"
-                onClick={onOpenInquiry}
+                onClick={() =>
+                  onOpenInquiry({
+                    formName: 'Admission Inquiry',
+                    title: 'ADMISSION INQUIRY',
+                    eyebrow: 'ABTECH LEARNING SERVICES',
+                    subtitle: 'Get instant counselling, eligibility checks, and fee details for 2026–2027 admissions.',
+                    course: 'NIOS — Class 10 & 12',
+                  })
+                }
               >
                 Inquire Now <span aria-hidden="true">↗</span>
               </button>
@@ -146,7 +171,15 @@ export default function Home({ onOpenInquiry }) {
                 <button
                   type="button"
                   className="card-text-link"
-                  onClick={onOpenInquiry}
+                  onClick={() =>
+                    onOpenInquiry({
+                      formName: `${s.shortName} Inquiry`,
+                      title: `${s.shortName.toUpperCase()} INQUIRY`,
+                      eyebrow: `ABTECH LEARNING SERVICES · ${s.shortName}`,
+                      subtitle: `Get customized counselling and details for ${s.title}.`,
+                      course: getServiceCourse(s.id),
+                    })
+                  }
                 >
                   Inquire Now →
                 </button>

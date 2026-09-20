@@ -129,12 +129,20 @@ export function Footer() {
   );
 }
 
-export function AdmissionInquiryModal({ isOpen, onClose }) {
+export function AdmissionInquiryModal({ isOpen, onClose, config }) {
+  const formName = config?.formName || 'Admission Inquiry';
+  const modalTitle = config?.title || (config?.formName ? config.formName.toUpperCase() : 'ADMISSION INQUIRY');
+  const modalEyebrow = config?.eyebrow || 'ABTECH LEARNING SERVICES';
+  const modalSubtitle =
+    config?.subtitle ||
+    'Get instant counselling, eligibility checks, and fee details for 2026–2027 admissions.';
+  const defaultCourse = config?.course || 'NIOS — Class 10 & 12';
+
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
     email: '',
-    course: 'NIOS — Class 10 & 12',
+    course: defaultCourse,
     message: '',
     consent: true,
   });
@@ -143,6 +151,16 @@ export function AdmissionInquiryModal({ isOpen, onClose }) {
   const [isSuccess, setIsSuccess] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const modalRef = useRef(null);
+
+  // Sync course if config changes
+  useEffect(() => {
+    if (isOpen && config?.course) {
+      setFormData((prev) => ({
+        ...prev,
+        course: config.course,
+      }));
+    }
+  }, [isOpen, config]);
 
   useEffect(() => {
     function handleKeyDown(e) {
@@ -187,14 +205,15 @@ export function AdmissionInquiryModal({ isOpen, onClose }) {
         },
         body: JSON.stringify({
           access_key: 'e6072117-2805-49ea-b544-8f319e50a0a4',
-          subject: `New Admission Inquiry: ${formData.name} (${formData.course})`,
-          from_name: 'ABTECH Admission Portal',
+          subject: `New ${formName}: ${formData.name} (${formData.course})`,
+          from_name: `ABTECH ${formName}`,
           recipient: 'bizelevate.ez@gmail.com',
+          form_name: formName,
           name: formData.name,
           email: formData.email,
           phone: formData.phone,
           course_interest: formData.course,
-          message: formData.message || 'Submitted via Admission Inquiry Popup.',
+          message: formData.message || `Submitted via ${formName} Form.`,
         }),
       });
 
@@ -202,12 +221,12 @@ export function AdmissionInquiryModal({ isOpen, onClose }) {
 
       if (result.success || result.status === 'success') {
         setIsSuccess(true);
-        setStatus('Thank you! Your admission inquiry has been received. Our expert counsellor will reach out shortly.');
+        setStatus(`Thank you! Your ${formName.toLowerCase()} has been received. Our expert counsellor will reach out shortly.`);
         setFormData({
           name: '',
           phone: '',
           email: '',
-          course: 'NIOS — Class 10 & 12',
+          course: defaultCourse,
           message: '',
           consent: true,
         });
@@ -244,11 +263,9 @@ export function AdmissionInquiryModal({ isOpen, onClose }) {
         </button>
 
         <div className="modal-header">
-          <p className="modal-eyebrow">ABTECH LEARNING SERVICES</p>
-          <h2 className="modal-title">ADMISSION INQUIRY</h2>
-          <p className="modal-subtitle">
-            Get instant counselling, eligibility checks, and fee details for 2026–2027 admissions.
-          </p>
+          <p className="modal-eyebrow">{modalEyebrow}</p>
+          <h2 className="modal-title">{modalTitle}</h2>
+          <p className="modal-subtitle">{modalSubtitle}</p>
         </div>
 
         {isSuccess ? (
@@ -356,7 +373,7 @@ export function AdmissionInquiryModal({ isOpen, onClose }) {
               type="submit"
               disabled={isSubmitting}
             >
-              {isSubmitting ? 'Submitting...' : 'Submit Admission Inquiry ↗'}
+              {isSubmitting ? 'Submitting...' : `Submit ${formName} ↗`}
             </button>
 
             {status && !isSuccess && (

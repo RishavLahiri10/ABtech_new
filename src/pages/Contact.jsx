@@ -1,16 +1,60 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { PageHeader } from '../components';
 import { institute } from '../content';
 
 export default function Contact() {
+  const [searchParams] = useSearchParams();
+  const serviceParam = (searchParams.get('service') || '').toLowerCase();
+  const typeParam = (searchParams.get('type') || '').toLowerCase();
+
+  const getInitialCourse = () => {
+    if (serviceParam.includes('bosse')) return 'BOSSE — Open Board';
+    if (serviceParam.includes('ignou')) return 'IGNOU — Degree & Diploma';
+    if (serviceParam.includes('college')) return 'Guidance College Admissions';
+    if (serviceParam.includes('career')) return 'Career Counselling';
+    return 'NIOS — Class 10 & 12';
+  };
+
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
     email: '',
-    course: 'NIOS — Class 10 & 12',
+    course: getInitialCourse(),
     message: '',
     consent: false,
   });
+
+  // Sync course when URL query changes
+  useEffect(() => {
+    if (serviceParam) {
+      setFormData((prev) => ({
+        ...prev,
+        course: getInitialCourse(),
+      }));
+    }
+  }, [serviceParam]);
+
+  const getFormTitle = (course) => {
+    if (course.includes('BOSSE')) {
+      return typeParam === 'admission' ? 'BOSSE Admission Form' : 'BOSSE General Inquiry';
+    }
+    if (course.includes('IGNOU')) {
+      return typeParam === 'admission' ? 'IGNOU Admission Form' : 'IGNOU General Inquiry';
+    }
+    if (course.includes('NIOS')) {
+      return typeParam === 'admission' ? 'NIOS Admission Form' : 'NIOS General Inquiry';
+    }
+    if (course.includes('College')) {
+      return 'College Admissions Inquiry';
+    }
+    if (course.includes('Career')) {
+      return 'Career Counselling Inquiry';
+    }
+    return 'General Admission Guidance';
+  };
+
+  const currentFormTitle = getFormTitle(formData.course);
 
   const [status, setStatus] = useState('');
   const [isSuccess, setIsSuccess] = useState(false);
@@ -39,14 +83,15 @@ export default function Contact() {
         },
         body: JSON.stringify({
           access_key: 'e6072117-2805-49ea-b544-8f319e50a0a4',
-          subject: `New Contact Inquiry: ${formData.name} (${formData.course})`,
-          from_name: 'ABTECH Contact Page',
+          subject: `New ${currentFormTitle}: ${formData.name} (${formData.course})`,
+          from_name: `ABTECH ${currentFormTitle}`,
           recipient: 'bizelevate.ez@gmail.com',
+          form_name: currentFormTitle,
           name: formData.name,
           email: formData.email,
           phone: formData.phone,
           course_interest: formData.course,
-          message: formData.message || 'No additional message provided.',
+          message: formData.message || `Submitted via ${currentFormTitle} on Contact Page.`,
         }),
       });
 
@@ -54,12 +99,12 @@ export default function Contact() {
 
       if (result.success || result.status === 'success') {
         setIsSuccess(true);
-        setStatus('Thank you! Your inquiry has been submitted successfully. Our admission team will contact you shortly.');
+        setStatus(`Thank you! Your ${currentFormTitle.toLowerCase()} has been submitted successfully. Our admission team will contact you shortly.`);
         setFormData({
           name: '',
           phone: '',
           email: '',
-          course: 'NIOS — Class 10 & 12',
+          course: getInitialCourse(),
           message: '',
           consent: false,
         });
@@ -117,8 +162,7 @@ export default function Contact() {
 
         <div className="contact-form-col">
           <form className="inquiry-form" onSubmit={submit}>
-            
-            <h2>Send Us Your Details</h2>
+            <h2>{currentFormTitle}</h2>
             <p className="small">All fields marked are required.</p>
 
             <label htmlFor="name">Full Name *</label>
@@ -204,7 +248,7 @@ export default function Contact() {
             </label>
 
             <button className="button button-maroon button-block" type="submit" disabled={isSubmitting}>
-              {isSubmitting ? 'Sending inquiry...' : 'Submit Inquiry'} <span aria-hidden="true">↗</span>
+              {isSubmitting ? 'Sending inquiry...' : `Submit ${currentFormTitle}`} <span aria-hidden="true">↗</span>
             </button>
 
             {status && (
