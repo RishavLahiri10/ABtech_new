@@ -67,15 +67,6 @@ const INITIAL_REVIEWS = [
   },
 ];
 
-const CATEGORIES = [
-  'All Reviews',
-  'NIOS (Class 10 & 12)',
-  'IGNOU (UG/PG Degrees)',
-  'BOSSE (Open Board)',
-  'Guidance College Admissions',
-  'Career Counselling',
-];
-
 function getInitials(name) {
   if (!name) return 'ST';
   const parts = name.trim().split(/\s+/);
@@ -97,8 +88,6 @@ export default function StudentReviews() {
     return INITIAL_REVIEWS;
   });
 
-  const [selectedCategory, setSelectedCategory] = useState('All Reviews');
-  const [sortBy, setSortBy] = useState('newest');
   const [successToast, setSuccessToast] = useState('');
   const [errorToast, setErrorToast] = useState('');
 
@@ -148,20 +137,8 @@ export default function StudentReviews() {
     }
   }, [reviews]);
 
-  // Filtered & Sorted reviews
-  const filteredReviews = reviews
-    .filter((r) => {
-      if (selectedCategory === 'All Reviews') return true;
-      return (
-        r.course.toLowerCase().includes(selectedCategory.toLowerCase().slice(0, 5)) ||
-        r.course === selectedCategory
-      );
-    })
-    .sort((a, b) => {
-      if (sortBy === 'newest') return (b.timestamp || 0) - (a.timestamp || 0);
-      if (sortBy === 'rating') return b.rating - a.rating;
-      return 0;
-    });
+  // Sorted reviews (newest first)
+  const sortedReviews = [...reviews].sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
 
   const totalReviews = reviews.length;
   const avgRating = (
@@ -211,52 +188,14 @@ export default function StudentReviews() {
           </div>
         )}
 
-        {/* Toolbar & Filter Chips */}
-        <div className="reviews-toolbar">
-          <div className="category-filter-chips" role="tablist" aria-label="Filter reviews by category">
-            {CATEGORIES.map((cat) => (
-              <button
-                key={cat}
-                type="button"
-                role="tab"
-                aria-selected={selectedCategory === cat}
-                className={`filter-chip ${selectedCategory === cat ? 'active' : ''}`}
-                onClick={() => setSelectedCategory(cat)}
-              >
-                {cat}
-              </button>
-            ))}
-          </div>
-
-          <div className="sort-dropdown-wrap">
-            <label htmlFor="sort-reviews" className="sort-label">Sort By:</label>
-            <select
-              id="sort-reviews"
-              className="sort-select"
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
-            >
-              <option value="newest">Most Recent</option>
-              <option value="rating">Highest Rating</option>
-            </select>
-          </div>
-        </div>
-
         {/* Live Reviews Feed Grid */}
         <div className="reviews-live-grid">
-          {filteredReviews.length === 0 ? (
+          {sortedReviews.length === 0 ? (
             <div className="no-reviews-box">
-              <p>No reviews found for the selected category.</p>
-              <button
-                type="button"
-                className="button button-outline-maroon"
-                onClick={() => setSelectedCategory('All Reviews')}
-              >
-                View All Reviews
-              </button>
+              <p>No student reviews available at the moment.</p>
             </div>
           ) : (
-            filteredReviews.map((rev) => {
+            sortedReviews.map((rev) => {
               return (
                 <article
                   key={rev.id}
