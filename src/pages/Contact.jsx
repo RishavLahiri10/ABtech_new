@@ -42,16 +42,13 @@ export default function Contact() {
     if (course.includes('IGNOU')) {
       return typeParam === 'admission' ? 'IGNOU Admission Form' : 'IGNOU General Inquiry';
     }
-    if (course.includes('NIOS')) {
-      return typeParam === 'admission' ? 'NIOS Admission Form' : 'NIOS General Inquiry';
-    }
     if (course.includes('College')) {
       return 'College Admissions Inquiry';
     }
     if (course.includes('Career')) {
       return 'Career Counselling Inquiry';
     }
-    return 'General Admission Guidance';
+    return 'Contact Us';
   };
 
   const currentFormTitle = getFormTitle(formData.course);
@@ -71,7 +68,7 @@ export default function Contact() {
   async function submit(event) {
     event.preventDefault();
     setIsSubmitting(true);
-    setStatus('Submitting your inquiry...');
+    setStatus('Submitting your message...');
     setIsSuccess(false);
 
     try {
@@ -83,7 +80,9 @@ export default function Contact() {
         },
         body: JSON.stringify({
           access_key: 'e6072117-2805-49ea-b544-8f319e50a0a4',
-          subject: `New ${currentFormTitle}: ${formData.name} (${formData.course})`,
+          subject: currentFormTitle === 'Contact Us'
+            ? `New Contact Message: ${formData.name} (${formData.course})`
+            : `New ${currentFormTitle}: ${formData.name} (${formData.course})`,
           from_name: `ABTECH ${currentFormTitle}`,
           recipient: 'bizelevate.ez@gmail.com',
           form_name: currentFormTitle,
@@ -99,7 +98,11 @@ export default function Contact() {
 
       if (result.success || result.status === 'success') {
         setIsSuccess(true);
-        setStatus(`Thank you! Your ${currentFormTitle.toLowerCase()} has been submitted successfully. Our admission team will contact you shortly.`);
+        setStatus(
+          currentFormTitle === 'Contact Us'
+            ? 'Thank you! Your message has been submitted successfully. Our team will contact you shortly.'
+            : `Thank you! Your ${currentFormTitle.toLowerCase()} has been submitted successfully. Our admission team will contact you shortly.`
+        );
         setFormData({
           name: '',
           phone: '',
@@ -124,7 +127,7 @@ export default function Contact() {
   return (
     <>
       <PageHeader
-        eyebrow="CONTACT ABTECH"
+        eyebrow="CONTACT ABtech learning & educational services"
         title="Questions are a good place to start."
         description="Tell us where you are in your learning journey. Our academic counsellors in Kolkata will help you understand the right next step."
       />
@@ -248,7 +251,11 @@ export default function Contact() {
             </label>
 
             <button className="button button-maroon button-block" type="submit" disabled={isSubmitting}>
-              {isSubmitting ? 'Sending inquiry...' : `Submit ${currentFormTitle}`} <span aria-hidden="true">↗</span>
+              {isSubmitting
+                ? 'Sending message...'
+                : currentFormTitle === 'Contact Us'
+                  ? 'Send Message ↗'
+                  : `Submit ${currentFormTitle} ↗`}
             </button>
 
             {status && (

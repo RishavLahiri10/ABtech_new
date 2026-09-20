@@ -582,6 +582,32 @@ nav a.active::after {
 }
 
 /* ==========================================================================
+   Hero Parallax Buttons
+   ========================================================================== */
+
+.hero-actions-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-block: 28px;
+}
+
+.button-hero-inquire,
+.button-hero-explore {
+  position: relative;
+  z-index: 2;
+  will-change: transform;
+  transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.button-hero-inquire:hover,
+.button-hero-explore:hover {
+  transform: translateY(-3px) scale(1.02) !important;
+}
+
+/* ==========================================================================
    Badges & Tags
    ========================================================================== */
 
@@ -1436,11 +1462,62 @@ footer address {
   font-style: normal;
   color: rgba(255, 255, 255, 0.85);
   font-size: 0.9375rem;
-  line-height: 1.7;
+  line-height: 1.6;
 }
 
-footer address strong {
+.footer-address {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.footer-org-name {
+  display: block;
   color: var(--white);
+  font-size: 0.98rem;
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+
+.footer-contact-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.footer-address-item {
+  margin-bottom: 4px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.footer-contact-icon {
+  flex-shrink: 0;
+  margin-top: 3px;
+  color: #fbbf24;
+  opacity: 0.95;
+}
+
+.footer-contact-link {
+  color: rgba(255, 255, 255, 0.9) !important;
+  text-decoration: none;
+  display: inline !important;
+  margin-bottom: 0 !important;
+  transition: color 0.2s ease, text-decoration 0.2s ease;
+}
+
+.footer-contact-link:hover {
+  color: #ffffff !important;
+  text-decoration: underline !important;
+}
+
+.footer-hours-item {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.78);
+  padding-top: 4px;
 }
 
 .footer-bottom {
