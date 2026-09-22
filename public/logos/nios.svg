@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 320" width="100%" height="100%">
+  <!-- Background Circle & Border -->
+  <circle cx="160" cy="160" r="152" fill="#ffffff" stroke="#1b3f8b" stroke-width="8"/>
+  
+  <!-- NIOS Center Emblem -->
+  <g transform="translate(160, 90) scale(0.72)">
+    <!-- Top Flame -->
+    <path d="M-6,-72 C-20,-48 -2,-32 -5,-14 C-3,-22 5,-30 5,-40 C16,-26 8,-54 -6,-72 Z" fill="#e53924"/>
+    <!-- Orange left swoosh -->
+    <path d="M-22,-14 C-20,26 -2,74 38,90 C-10,80 -34,42 -34,-14 Z" fill="#f25f22"/>
+    <path d="M-14,-14 C-12,20 2,62 34,76 C-6,68 -24,36 -24,-14 Z" fill="#e53924" opacity="0.6"/>
+    <!-- Blue outer arc -->
+    <path d="M-4,-14 C52,-14 96,24 96,74 L96,106 L44,106 C44,92 40,80 34,74 C28,68 18,66 8,66 C-12,66 -22,78 -22,96 L-22,106 L-48,106 L-48,-14 Z" fill="#1b3f8b"/>
+    <!-- Inner White ellipse -->
+    <path d="M38,70 C38,30 12,2 -4,2 C-16,2 -22,14 -22,30 L-22,70 C-22,82 -12,90 0,90 C16,90 38,82 38,70 Z" fill="#ffffff"/>
+    <!-- Inner blue letter S -->
+    <path d="M-6,22 C14,22 18,30 18,38 L1,38 C1,33 -1,31 -6,31 C-10,31 -12,33 -12,38 C-12,46 18,44 18,60 C18,70 8,76 -6,76 C-20,76 -24,68 -24,58 L-7,58 C-7,64 -4,66 -1,66 C4,66 6,63 6,59 C6,50 -24,50 -24,36 C-24,26 -16,22 -6,22 Z" fill="#1b3f8b"/>
+  </g>
+
+  <!-- Sanskrit Tagline -->
+  <text x="160" y="178" font-family="'Segoe UI', -apple-system, sans-serif" font-size="14" font-weight="700" fill="#c02619" text-anchor="middle" letter-spacing="0.4">
+    विद्याधनं सर्वधनं प्रधानम्
+  </text>
+
+  <!-- NIOS Title -->
+  <text x="160" y="226" font-family="'Arial Black', 'Inter', -apple-system, sans-serif" font-size="44" font-weight="900" fill="#1b3f8b" text-anchor="middle" letter-spacing="2">
+    NIOS
+  </text>
+
+  <!-- Subtitle -->
+  <text x="160" y="258" font-family="'Inter', -apple-system, sans-serif" font-size="15" font-weight="700" fill="#1b3f8b" text-anchor="middle" letter-spacing="0.2">
+    National Institute of
+  </text>
+  <text x="160" y="278" font-family="'Inter', -apple-system, sans-serif" font-size="15" font-weight="700" fill="#1b3f8b" text-anchor="middle" letter-spacing="0.2">
+    Open Schooling
+  </text>
+</svg>

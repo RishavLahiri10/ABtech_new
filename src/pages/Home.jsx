@@ -142,6 +142,70 @@ export default function Home({ onOpenInquiry }) {
                 <span>Let’s discover your customized academic roadmap today.</span>
               </div>
             </div>
+
+            {/* Mini Icons Row below the Note Box */}
+            <div className="hero-affiliations-container">
+              <div className="hero-affiliations-header">
+                <span className="hero-affiliations-divider-line" aria-hidden="true"></span>
+                <span className="hero-affiliations-title">RECOGNIZED BOARDS &amp; UNIVERSITIES</span>
+                <span className="hero-affiliations-divider-line" aria-hidden="true"></span>
+              </div>
+              <div className="hero-affiliations-grid">
+                <Link
+                  to="/services#nios"
+                  className="affiliation-mini-card"
+                  title="NIOS - National Institute of Open Schooling"
+                >
+                  <div className="affiliation-icon-wrapper">
+                    <img
+                      src="/logos/nios.svg"
+                      alt="NIOS - National Institute of Open Schooling"
+                      className="affiliation-mini-icon"
+                    />
+                  </div>
+                  <div className="affiliation-meta">
+                    <span className="affiliation-name">NIOS</span>
+                    <span className="affiliation-desc">Class 10 &amp; 12</span>
+                  </div>
+                </Link>
+
+                <Link
+                  to="/services#bosse"
+                  className="affiliation-mini-card"
+                  title="BOSSE - Board of Open Schooling & Skill Education"
+                >
+                  <div className="affiliation-icon-wrapper">
+                    <img
+                      src="/logos/bosse.svg"
+                      alt="BOSSE - Board of Open Schooling & Skill Education"
+                      className="affiliation-mini-icon"
+                    />
+                  </div>
+                  <div className="affiliation-meta">
+                    <span className="affiliation-name">BOSSE</span>
+                    <span className="affiliation-desc">Open &amp; Skill</span>
+                  </div>
+                </Link>
+
+                <Link
+                  to="/services#ignou"
+                  className="affiliation-mini-card"
+                  title="IGNOU - Indira Gandhi National Open University"
+                >
+                  <div className="affiliation-icon-wrapper">
+                    <img
+                      src="/logos/ignou.svg"
+                      alt="IGNOU - Indira Gandhi National Open University"
+                      className="affiliation-mini-icon"
+                    />
+                  </div>
+                  <div className="affiliation-meta">
+                    <span className="affiliation-name">IGNOU</span>
+                    <span className="affiliation-desc">UG &amp; PG Degrees</span>
+                  </div>
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
       </section>

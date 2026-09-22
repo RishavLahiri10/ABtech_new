@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 320" width="100%" height="100%">
+  <!-- Outer Blue Ring -->
+  <circle cx="160" cy="160" r="152" fill="#ffffff" stroke="#0080cb" stroke-width="8"/>
+  
+  <!-- IGNOU Center Emblem -->
+  <g transform="translate(160, 102) scale(0.72)">
+    <!-- Outer U Container Shape -->
+    <path d="M-66,-66 L-44,-66 L-44,8 C-44,38 -20,54 0,54 C20,54 44,38 44,8 L44,-66 L66,-66 L66,10 C66,54 36,76 0,76 C-36,76 -66,54 -66,10 Z" fill="#0080cb"/>
+    <!-- Outer Arc Monogram -->
+    <circle cx="0" cy="-6" r="32" fill="none" stroke="#0080cb" stroke-width="12"/>
+    <path d="M-10,-32 L10,-32 C18,-32 24,-24 24,-14 L24,-4 C24,4 16,10 6,10 L-10,10 C-18,10 -24,4 -24,-4 L-24,-14 C-24,-24 -16,-32 -8,-32 Z" fill="none" stroke="#ffffff" stroke-width="6"/>
+    <!-- S Monogram in center -->
+    <path d="M-5,-24 C-5,-24 7,-24 7,-15 C7,-7 -7,-7 -7,1 C-7,9 7,9 7,9" fill="none" stroke="#0080cb" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+  <!-- ignou text -->
+  <text x="160" y="218" font-family="'Arial Black', 'Inter', -apple-system, sans-serif" font-size="46" font-weight="900" fill="#0080cb" text-anchor="middle" letter-spacing="-1">
+    ignou
+  </text>
+
+  <!-- Full Name -->
+  <text x="160" y="254" font-family="'Inter', -apple-system, sans-serif" font-size="15" font-weight="700" fill="#1e293b" text-anchor="middle" letter-spacing="0.2">
+    Indira Gandhi National
+  </text>
+  <text x="160" y="274" font-family="'Inter', -apple-system, sans-serif" font-size="15" font-weight="700" fill="#1e293b" text-anchor="middle" letter-spacing="0.2">
+    Open University
+  </text>
+</svg>

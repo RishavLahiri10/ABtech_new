@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 320" width="100%" height="100%">
+  <!-- Outer Green Circle & Border -->
+  <circle cx="160" cy="160" r="152" fill="#ffffff" stroke="#167a3a" stroke-width="8"/>
+  
+  <!-- BOSSE Emblem -->
+  <g transform="translate(160, 96)">
+    <!-- Radiant Sun Rays -->
+    <g fill="#f5af19">
+      <circle cx="0" cy="-6" r="30"/>
+      <polygon points="0,-52 -5,-28 5,-28"/>
+      <polygon points="-18,-48 -20,-26 -10,-28"/>
+      <polygon points="18,-48 10,-28 20,-26"/>
+      <polygon points="-34,-40 -30,-20 -22,-24"/>
+      <polygon points="34,-40 22,-24 30,-20"/>
+      <polygon points="-46,-26 -36,-12 -30,-18"/>
+      <polygon points="46,-26 30,-18 36,-12"/>
+      <polygon points="-52,-10 -40,-2 -36,-10"/>
+      <polygon points="52,-10 36,-10 40,-2"/>
+    </g>
+
+    <!-- Green Open Book Pages / Hills -->
+    <path d="M-64,-10 C-38,-28 -16,-8 0,0 L0,24 C-16,16 -38,-4 -64,14 Z" fill="#1b6e35"/>
+    <path d="M64,-10 C38,-28 16,-8 0,0 L0,24 C16,16 38,-4 64,14 Z" fill="#248a44"/>
+    <path d="M-60,8 C-38,-8 -16,8 0,16 L0,28 C-16,20 -38,4 -60,20 Z" fill="#155c2c"/>
+    <path d="M60,8 C38,-8 16,8 0,16 L0,28 C16,20 38,4 60,20 Z" fill="#1f7a3c"/>
+
+    <!-- Blue Curve Banner -->
+    <path d="M-68,24 C-40,8 40,8 68,24 C44,16 -44,16 -68,24 Z" fill="#0288d1"/>
+    <path d="M-56,28 C-30,16 30,16 56,28 C38,20 -38,20 -56,28 Z" fill="#29b6f6"/>
+  </g>
+
+  <!-- BOSSE Title -->
+  <text x="160" y="220" font-family="'Arial Black', 'Inter', -apple-system, sans-serif" font-size="44" font-weight="900" fill="#167a3a" text-anchor="middle" letter-spacing="2">
+    BOSSE
+  </text>
+
+  <!-- Subtitle -->
+  <text x="160" y="254" font-family="'Inter', -apple-system, sans-serif" font-size="14.5" font-weight="700" fill="#1e293b" text-anchor="middle" letter-spacing="0.2">
+    Board of Open Schooling
+  </text>
+  <text x="160" y="274" font-family="'Inter', -apple-system, sans-serif" font-size="14.5" font-weight="700" fill="#1e293b" text-anchor="middle" letter-spacing="0.2">
+    &amp; Skill Education
+  </text>
+</svg>
