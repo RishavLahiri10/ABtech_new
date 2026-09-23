@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ContactStrip, StudentReviews } from '../components';
+import { ContactStrip, StudentReviews, ImageDisplayBox } from '../components';
 import { highlights, services } from '../content';
 
 export default function Home({ onOpenInquiry }) {
@@ -41,6 +41,9 @@ export default function Home({ onOpenInquiry }) {
 
   return (
     <>
+      {/* Featured Banner Display Box (Below Header) */}
+      <ImageDisplayBox onOpenInquiry={onOpenInquiry} />
+
       {/* Hero Section with Parallax Elements */}
       <section className="hero parallax-hero-wrapper">
         <div

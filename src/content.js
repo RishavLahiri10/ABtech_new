@@ -109,3 +109,43 @@ export const services = [
   },
 ];
 
+/**
+ * ============================================================================
+ * BANNER DISPLAY BOX PICTURES
+ * ============================================================================
+ * You can easily add more pictures by adding a new object to this list:
+ * 
+ * Example:
+ * {
+ *   id: 5,
+ *   image: '/banners/my_photo.jpg',     // path in public folder (e.g. /banners/xyz.jpg) or web URL
+ *   alt: 'Description of photo',
+ * }
+ */
+export const bannerSlides = [
+  {
+    id: 1,
+    image: '/banners/slide1.jpg',
+    alt: 'ABTECH Educational Services - Learning & Study Campus',
+  },
+  {
+    id: 2,
+    image: '/banners/slide2.jpg',
+    alt: 'Academic Milestones & Graduation Success',
+  },
+  {
+    id: 3,
+    image: '/banners/slide3.jpg',
+    alt: 'Personalized Career Guidance & Counselling Session',
+  },
+  {
+    id: 4,
+    image: '/banners/slide4.jpg',
+    alt: 'Premier University & College Admissions',
+  },
+  {
+    id: 5,
+    image: '/banners/slide5.jpg',
+    alt: 'Welcome To ABTECH',
+  },
+];

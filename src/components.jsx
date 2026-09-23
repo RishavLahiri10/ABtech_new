@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { institute, services } from './content';
 export { default as StudentReviews } from './StudentReviews';
+export { default as ImageDisplayBox } from './ImageDisplayBox';
 
 export function Brand() {
   return (
