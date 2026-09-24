@@ -12,6 +12,7 @@ import {
   Footer,
   AdmissionInquiryModal,
   FloatingContactButtons,
+  SearchBar,
 } from './components';
 import { institute } from './content';
 import Home from './pages/Home';
@@ -405,6 +406,13 @@ export default function App() {
             className={menuOpen ? 'open' : ''}
             aria-label="Main navigation"
           >
+            <div className="nav-search-container">
+              <SearchBar
+                onOpenInquiry={handleOpenInquiry}
+                onNavigate={() => setMenuOpen(false)}
+              />
+            </div>
+
             <NavLink to="/" end onClick={() => setMenuOpen(false)}>
               Home
             </NavLink>
