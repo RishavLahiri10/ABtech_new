@@ -928,12 +928,12 @@ export default function SearchBar({ onOpenInquiry, onNavigate, isMobileNav = fal
       <div className={`search-input-box ${isOpen ? 'is-focused' : ''}`}>
         <span className="search-icon" aria-hidden="true">
           <svg
-            width="17"
-            height="17"
+            width="15"
+            height="15"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
-            strokeWidth="2.2"
+            strokeWidth="2.4"
             strokeLinecap="round"
             strokeLinejoin="round"
           >
@@ -946,7 +946,7 @@ export default function SearchBar({ onOpenInquiry, onNavigate, isMobileNav = fal
           ref={inputRef}
           type="search"
           className="search-input"
-          placeholder="Search courses, syllabus, forms..."
+          placeholder="SEARCH"
           value={query}
           onChange={(e) => {
             setQuery(e.target.value);
@@ -961,7 +961,7 @@ export default function SearchBar({ onOpenInquiry, onNavigate, isMobileNav = fal
           autoComplete="off"
         />
 
-        {query ? (
+        {query && (
           <button
             type="button"
             className="search-clear-btn"
@@ -973,10 +973,6 @@ export default function SearchBar({ onOpenInquiry, onNavigate, isMobileNav = fal
           >
             ✕
           </button>
-        ) : (
-          <span className="search-shortcut-hint" aria-hidden="true" title="Quick shortcut">
-            <kbd>Ctrl</kbd> <kbd>K</kbd>
-          </span>
         )}
       </div>
 

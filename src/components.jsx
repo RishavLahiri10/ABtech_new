@@ -229,10 +229,10 @@ export function AdmissionInquiryModal({ isOpen, onClose, config }) {
           'Accept': 'application/json',
         },
         body: JSON.stringify({
-          access_key: 'e6072117-2805-49ea-b544-8f319e50a0a4',
+          access_key: 'cc414274-b95e-4c25-8862-35a72a564591',
           subject: `New ${formName}: ${formData.name} (${formData.course})`,
           from_name: `ABTECH ${formName}`,
-          recipient: 'bizelevate.ez@gmail.com',
+          recipient: 'abtechlearning@gmail.com',
           form_name: formName,
           name: formData.name,
           email: formData.email,
