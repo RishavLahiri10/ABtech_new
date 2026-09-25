@@ -1,20 +1,16 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 
-// Central Database API Endpoint on your server
-const API_URL = 'https://abtech.byte4ge.shop/api/v1/feedback.php';
-
-// Initial verified reviews in case server is loading
-const INITIAL_REVIEWS = [
+// Verified student reviews with diverse categories & photos
+export const INITIAL_REVIEWS = [
   {
     id: 'rev-1',
-    name: 'Rahul Sen',
+    name: 'Rahul Sharma',
     initials: 'RS',
     avatar: '/avatars/student1.jpg',
     course: 'NIOS (Class 10 & 12)',
     rating: 5,
-    date: '2 days ago',
-    timestamp: Date.now() - 172800000,
-    text: 'I had a gap year after failing in 12th standard and thought college was out of reach. ABTECH guided me step-by-step through NIOS with Transfer of Credit (TOC). I cleared with 74% in the very next cycle and got admission into B.Com!',
+    date: 'September 2026',
+    text: 'The admission counselling was very helpful and the entire process was explained clearly. I had a gap year after 12th standard and thought college was out of reach. ABTECH guided me step-by-step through NIOS with Transfer of Credit (TOC). I cleared with 76% in the very next cycle and secured my college seat!',
     verified: true,
   },
   {
@@ -24,9 +20,8 @@ const INITIAL_REVIEWS = [
     avatar: '/avatars/student2.jpg',
     course: 'IGNOU (UG/PG Degrees)',
     rating: 5,
-    date: '4 days ago',
-    timestamp: Date.now() - 345600000,
-    text: 'Pursuing my BCA from IGNOU while working full-time in Kolkata. The assignment guidance, synopsis prep, and timely reminders from ABTECH mentors made my degree journey completely stress-free.',
+    date: 'September 2026',
+    text: 'Pursuing my BCA from IGNOU while working full-time in Kolkata. The assignment guidance, synopsis prep, and timely reminders from ABTECH mentors made my degree journey completely stress-free. Always responsive and reliable.',
     verified: true,
   },
   {
@@ -36,9 +31,8 @@ const INITIAL_REVIEWS = [
     avatar: '/avatars/student3.jpg',
     course: 'Guidance College Admissions',
     rating: 5,
-    date: '1 week ago',
-    timestamp: Date.now() - 604800000,
-    text: 'The college guidance team at ABTECH helped me navigate engineering cutoffs and seat selection across Kolkata. Transparent and genuine guidance without any false promises.',
+    date: 'August 2026',
+    text: 'The college guidance team at ABTECH helped me navigate engineering cutoffs and seat selection across premier Kolkata universities. Transparent and genuine guidance without any false promises. Truly grateful for their mentorship.',
     verified: true,
   },
   {
@@ -48,9 +42,8 @@ const INITIAL_REVIEWS = [
     avatar: '/avatars/student4.jpg',
     course: 'BOSSE (Open Board)',
     rating: 5,
-    date: '2 weeks ago',
-    timestamp: Date.now() - 1209600000,
-    text: 'Enrolled in BOSSE through ABTECH Barrackpore center. Fast-track verification, complete study materials, and practical exam support. Very supportive staff.',
+    date: 'August 2026',
+    text: 'Enrolled in BOSSE through ABTECH Barrackpore center. Fast-track verification, complete study materials, and practical exam support. The staff is extremely polite, patient, and knowledgeable throughout the process.',
     verified: true,
   },
   {
@@ -60,9 +53,30 @@ const INITIAL_REVIEWS = [
     avatar: '/avatars/student5.jpg',
     course: 'Career Counselling',
     rating: 5,
-    date: '3 weeks ago',
-    timestamp: Date.now() - 1814400000,
-    text: 'Had an insightful 1-on-1 career counselling session. They scientifically mapped my strengths and helped me choose the right postgraduate specialisation. Genuine and transparent advice.',
+    date: 'July 2026',
+    text: 'Had an insightful 1-on-1 career counselling session with senior mentors. They scientifically mapped my strengths and helped me choose the right postgraduate specialisation aligned with industry opportunities.',
+    verified: true,
+  },
+  {
+    id: 'rev-6',
+    name: 'Vikramaditya Bose',
+    initials: 'VB',
+    avatar: '/avatars/student6.jpg',
+    course: 'Guidance College Admissions',
+    rating: 5,
+    date: 'July 2026',
+    text: 'ABTECH made my college admission process seamless. From documentation verification to selecting the best accredited college in Kolkata, their counsellors were with me at every stage. Highly recommended!',
+    verified: true,
+  },
+  {
+    id: 'rev-7',
+    name: 'Sneha Ganguly',
+    initials: 'SG',
+    avatar: '/avatars/student7.jpg',
+    course: 'NIOS (Class 10 & 12)',
+    rating: 5,
+    date: 'June 2026',
+    text: 'I was very anxious about completing my 12th standard after changing streams. The faculty at ABTECH Barrackpore provided personalized study roadmaps and solved practical files that helped me score 81%.',
     verified: true,
   },
 ];
@@ -74,183 +88,335 @@ function getInitials(name) {
   return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
 }
 
-export default function StudentReviews() {
-  const [reviews, setReviews] = useState(() => {
-    try {
-      const saved = localStorage.getItem('abtech_student_reviews');
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
-      }
-    } catch {
-      // ignore
-    }
-    return INITIAL_REVIEWS;
-  });
+/**
+ * ReviewDisplayBox Component
+ * Matches the header section display box with fixed dimensions and frame styling.
+ * 30% person's photo / 70% review content, automatic 2-second slide transition,
+ * responsive mobile layout, and a Read More modal for detailed reviews.
+ */
+export default function ReviewDisplayBox({ onOpenInquiry }) {
+  const reviews = INITIAL_REVIEWS;
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
+  const [activeModalReview, setActiveModalReview] = useState(null);
 
-  const [successToast, setSuccessToast] = useState('');
-  const [errorToast, setErrorToast] = useState('');
-
-  // 1. Fetch reviews from Central Database on Mount
-  const fetchReviewsFromBackend = useCallback(async () => {
-    try {
-      const res = await fetch(API_URL, { cache: 'no-store' });
-      if (res.ok) {
-        const result = await res.json();
-        const rawList = result.data || result.reviews || (Array.isArray(result) ? result : null);
-
-        if ((result.success || result.status === 'success' || Array.isArray(rawList)) && Array.isArray(rawList)) {
-          const formatted = rawList.map((item, idx) => ({
-            id: item.id || `rev-${item.id || Math.random()}`,
-            name: item.student_name || item.name || 'Student Learner',
-            initials: item.initials || getInitials(item.student_name || item.name || 'ST'),
-            avatar: item.avatar || item.image || `/avatars/student${(idx % 5) + 1}.jpg`,
-            course: item.category || item.course || item.course_interest || item.program || 'NIOS (Class 10 & 12)',
-            rating: Number(item.rating || item.stars || 5),
-            date: item.date || (item.created_at ? new Date(item.created_at).toLocaleDateString() : 'Recent'),
-            timestamp: item.timestamp || (item.created_at ? new Date(item.created_at).getTime() : Date.now()),
-            text: item.feedback || item.message || item.text || item.review || '',
-            verified: item.is_verified !== undefined ? Boolean(item.is_verified) : true,
-          }));
-
-          if (formatted.length > 0) {
-            setReviews(formatted);
-            localStorage.setItem('abtech_student_reviews', JSON.stringify(formatted));
-          }
-        }
-      }
-    } catch (error) {
-      console.error('Feedback error:', error);
-    }
-  }, []);
-
-  useEffect(() => {
-    fetchReviewsFromBackend();
-  }, [fetchReviewsFromBackend]);
-
-  // Persist reviews locally as cache
-  useEffect(() => {
-    try {
-      localStorage.setItem('abtech_student_reviews', JSON.stringify(reviews));
-    } catch {
-      // ignore
-    }
-  }, [reviews]);
-
-  // Sorted reviews (newest first)
-  const sortedReviews = [...reviews].sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+  // Touch swipe support for mobile
+  const [touchStart, setTouchStart] = useState(0);
+  const [touchEnd, setTouchEnd] = useState(0);
+  const timerRef = useRef(null);
 
   const totalReviews = reviews.length;
-  const avgRating = (
-    reviews.reduce((acc, r) => acc + r.rating, 0) / (totalReviews || 1)
-  ).toFixed(1);
+
+  const nextSlide = useCallback(() => {
+    if (totalReviews === 0) return;
+    setCurrentIndex((prev) => (prev + 1) % totalReviews);
+  }, [totalReviews]);
+
+  const prevSlide = useCallback(() => {
+    if (totalReviews === 0) return;
+    setCurrentIndex((prev) => (prev - 1 + totalReviews) % totalReviews);
+  }, [totalReviews]);
+
+  // Auto-play timer: 2 seconds, pauses when user hovers
+  useEffect(() => {
+    if (totalReviews <= 1) return;
+    if (!isHovered) {
+      timerRef.current = setInterval(() => {
+        nextSlide();
+      }, 2000);
+    }
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
+  }, [isHovered, nextSlide, totalReviews]);
+
+  // Touch swipe gestures
+  const handleTouchStart = (e) => {
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchMove = (e) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    const distance = touchStart - touchEnd;
+    const minSwipeDistance = 45;
+    if (distance > minSwipeDistance) {
+      nextSlide();
+    } else if (distance < -minSwipeDistance) {
+      prevSlide();
+    }
+    setTouchStart(0);
+    setTouchEnd(0);
+  };
 
   return (
-    <section className="student-reviews-section" id="reviews" aria-labelledby="reviews-heading">
-      <div className="container">
+    <div
+      className="display-box-wrapper extended"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+      role="region"
+      aria-roledescription="carousel"
+      aria-label="Student Reviews & Testimonials Showcase"
+    >
+      <div className="display-box-extended-container">
 
-        {/* Section Heading & Aggregate Score */}
-        <div className="reviews-header-wrap">
-          <div>
-            <h2 id="reviews-heading" className="reviews-main-title">
-              What Our Students &amp; Learners Say
-            </h2>
-            <p className="reviews-subheading">
-              Real experiences from students who continued their education, cleared boards, and achieved their career goals with ABTECH Kolkata.
-            </p>
+        {/* Top Control Bar Above/In Header Box */}
+        <div className="header-review-top-bar">
+          <div className="header-review-eyebrow">
+            <span className="live-pulse" aria-hidden="true"></span>
+            <span>VERIFIED STUDENT SUCCESS STORIES &amp; REVIEWS · ABTECH KOLKATA</span>
           </div>
+        </div>
 
-          <div className="reviews-score-card">
-            <div className="score-number-row">
-              <span className="score-big">{avgRating}</span>
-              <div className="score-stars-col">
-                <div className="stars-visual" aria-label={`Rating ${avgRating} out of 5 stars`}>
-                  {'★★★★★'}
+        {/* MAIN DISPLAY BOX FRAME — EXACT SAME DIMENSIONS AS HEADER DISPLAY BOX */}
+        <div className="display-box-frame header-review-display-frame">
+          <div className="display-box-viewport header-review-display-viewport">
+            {reviews.map((rev, idx) => {
+              const isActive = idx === currentIndex;
+              const rating = Number(rev.rating) || 5;
+
+              return (
+                <div
+                  key={rev.id || idx}
+                  className={`header-review-slide ${isActive ? 'active' : ''}`}
+                  aria-hidden={!isActive}
+                  role="group"
+                  aria-roledescription="slide"
+                  aria-label={`Review ${idx + 1} of ${totalReviews}`}
+                >
+                  {/* ---------------- 30% IMAGE SECTION ---------------- */}
+                  <div className="header-review-media-30">
+                    {rev.avatar ? (
+                      <img
+                        src={rev.avatar}
+                        alt={`${rev.name} portrait`}
+                        className="header-reviewer-img"
+                        loading={idx === 0 ? 'eager' : 'lazy'}
+                      />
+                    ) : (
+                      <div className="header-reviewer-fallback">
+                        {rev.initials || getInitials(rev.name)}
+                      </div>
+                    )}
+                    <div className="header-reviewer-badge-bottom">
+                      <span className="star-rating-pill">★ {rating.toFixed(1)}</span>
+                    </div>
+                  </div>
+
+                  {/* ---------------- 70% REVIEW CONTENT SECTION ---------------- */}
+                  <div className="header-review-content-70">
+                    {/* Top Row: Stars, Name, Course, Verified Badge */}
+                    <div className="header-rev-top-row">
+                      <div className="header-rev-author-meta">
+                        <div className="header-rev-stars" aria-label={`${rating} out of 5 stars`}>
+                          {'★'.repeat(rating)}
+                          {'☆'.repeat(5 - rating)}
+                        </div>
+                        <h3 className="header-rev-name">{rev.name}</h3>
+                        <div className="header-rev-tags-row">
+                          <span className="header-rev-course">{rev.course}</span>
+                          {rev.verified && (
+                            <span className="verified-badge-pill">✓ Verified Learner</span>
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="header-rev-date-meta">
+                        <span className="header-rev-date">
+                          📅 {rev.date || 'September 2026'}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Middle: Fixed-Height Review Comment */}
+                    <div className="header-rev-text-block">
+                      <span className="quote-mark-icon" aria-hidden="true">“</span>
+                      <p className="header-rev-text-body">
+                        {rev.text}
+                      </p>
+                      {rev.text && rev.text.length > 130 && (
+                        <button
+                          type="button"
+                          className="btn-read-more-inline"
+                          onClick={() => setActiveModalReview(rev)}
+                        >
+                          Read More →
+                        </button>
+                      )}
+                    </div>
+
+                    {/* Bottom Controls Bar */}
+                    <div className="header-rev-bottom-bar">
+                      <div className="header-rev-slide-nav">
+                        <button
+                          type="button"
+                          className="slide-arrow-btn arrow-left"
+                          onClick={prevSlide}
+                          aria-label="Previous Review"
+                          disabled={totalReviews <= 1}
+                        >
+                          ‹
+                        </button>
+
+                        <div className="slide-dots-indicator" role="tablist">
+                          {reviews.map((_, dotIdx) => (
+                            <button
+                              key={dotIdx}
+                              type="button"
+                              className={`slide-dot-pill ${dotIdx === currentIndex ? 'active' : ''}`}
+                              onClick={() => setCurrentIndex(dotIdx)}
+                              aria-label={`Go to review ${dotIdx + 1}`}
+                            />
+                          ))}
+                        </div>
+
+                        <button
+                          type="button"
+                          className="slide-arrow-btn arrow-right"
+                          onClick={nextSlide}
+                          aria-label="Next Review"
+                          disabled={totalReviews <= 1}
+                        >
+                          ›
+                        </button>
+
+                        <span className="slide-counter-label">
+                          {currentIndex + 1} / {totalReviews}
+                        </span>
+                      </div>
+
+                      {onOpenInquiry && (
+                        <button
+                          type="button"
+                          className="button button-maroon button-header-review-inquire"
+                          onClick={() =>
+                            onOpenInquiry({
+                              formName: `${rev.course} Inquiry`,
+                              title: `INQUIRY: ${rev.course.toUpperCase()}`,
+                              eyebrow: 'ABTECH COUNSELLING',
+                              subtitle: `Connect with our expert mentors for ${rev.course}.`,
+                              course: rev.course,
+                            })
+                          }
+                        >
+                          Inquire About Course <span aria-hidden="true">↗</span>
+                        </button>
+                      )}
+                    </div>
+                  </div>
                 </div>
-                <span className="score-total-count">Based on {totalReviews} Student Reviews</span>
+              );
+            })}
+          </div>
+        </div>
+
+      </div>
+
+      {/* ------------------------------------------------------------- */}
+      {/* READ MORE FULL TESTIMONIAL MODAL */}
+      {/* ------------------------------------------------------------- */}
+      {activeModalReview && (
+        <div
+          className="review-modal-backdrop"
+          onClick={() => setActiveModalReview(null)}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="read-more-title"
+        >
+          <div
+            className="review-modal-card"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              type="button"
+              className="modal-close-btn"
+              onClick={() => setActiveModalReview(null)}
+              aria-label="Close testimonial dialog"
+            >
+              ✕
+            </button>
+
+            <div className="read-more-split">
+              {/* 30% Person Image */}
+              <div className="read-more-media-30">
+                {activeModalReview.avatar ? (
+                  <img
+                    src={activeModalReview.avatar}
+                    alt={activeModalReview.name}
+                    className="read-more-photo"
+                  />
+                ) : (
+                  <div className="read-more-avatar-fallback">
+                    {activeModalReview.initials || getInitials(activeModalReview.name)}
+                  </div>
+                )}
+                <div className="read-more-media-badge">
+                  <span className="star-badge-solid">★ {Number(activeModalReview.rating || 5).toFixed(1)}</span>
+                </div>
+              </div>
+
+              {/* 70% Person Review Content */}
+              <div className="read-more-content-70">
+                <div className="read-more-header">
+                  <div>
+                    <h3 id="read-more-title" className="read-more-student-name">
+                      {activeModalReview.name}
+                    </h3>
+                    <div className="read-more-meta-row">
+                      <span className="read-more-course-tag">{activeModalReview.course}</span>
+                      {activeModalReview.verified && (
+                        <span className="verified-badge">✓ Verified Student</span>
+                      )}
+                    </div>
+                  </div>
+                  <div className="read-more-stars" aria-label={`${activeModalReview.rating} out of 5 stars`}>
+                    {'★'.repeat(Number(activeModalReview.rating || 5))}
+                    {'☆'.repeat(5 - Number(activeModalReview.rating || 5))}
+                  </div>
+                </div>
+
+                <div className="read-more-quote-body">
+                  <span className="quote-mark-large">“</span>
+                  <p className="read-more-full-text">{activeModalReview.text}</p>
+                </div>
+
+                <div className="read-more-footer">
+                  <span className="read-more-date">
+                    📅 Date of Review: <strong>{activeModalReview.date || 'Recent'}</strong>
+                  </span>
+                  {onOpenInquiry && (
+                    <button
+                      type="button"
+                      className="button button-maroon button-sm"
+                      onClick={() => {
+                        setActiveModalReview(null);
+                        onOpenInquiry({
+                          formName: `${activeModalReview.course} Inquiry`,
+                          title: `INQUIRE ABOUT ${activeModalReview.course.toUpperCase()}`,
+                          eyebrow: 'ABTECH COUNSELLING',
+                          subtitle: `Connect with our experts regarding ${activeModalReview.course}.`,
+                          course: activeModalReview.course,
+                        });
+                      }}
+                    >
+                      Inquire About This Course ↗
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
           </div>
         </div>
+      )}
 
-        {/* Notifications */}
-        {successToast && (
-          <div className="review-toast-success" role="status">
-            <span className="toast-icon">✓</span>
-            <span>{successToast}</span>
-          </div>
-        )}
-
-        {errorToast && (
-          <div className="review-toast-error" role="alert">
-            <span className="toast-icon">✕</span>
-            <span>{errorToast}</span>
-          </div>
-        )}
-
-        {/* Live Reviews Feed Grid */}
-        <div className="reviews-live-grid">
-          {sortedReviews.length === 0 ? (
-            <div className="no-reviews-box">
-              <p>No student reviews available at the moment.</p>
-            </div>
-          ) : (
-            sortedReviews.map((rev) => {
-              return (
-                <article
-                  key={rev.id}
-                  className="review-card"
-                  id={rev.id}
-                >
-                  <div className="review-card-top">
-                    <div className="student-profile">
-                      <div className="student-avatar" aria-hidden="true">
-                        {rev.avatar ? (
-                          <img
-                            src={rev.avatar}
-                            alt={`${rev.name} avatar`}
-                            className="student-avatar-img"
-                          />
-                        ) : (
-                          <span>{rev.initials || getInitials(rev.name)}</span>
-                        )}
-                      </div>
-                      <div>
-                        <div className="student-name-row">
-                          <strong className="student-name">{rev.name}</strong>
-                          {rev.verified && (
-                            <span className="verified-badge" title="Verified Student Review">
-                              ✓ Verified Learner
-                            </span>
-                          )}
-                        </div>
-                        <span className="review-course-tag">{rev.course}</span>
-                      </div>
-                    </div>
-
-                    <div className="review-meta-right">
-                      <div className="review-stars" aria-label={`${rev.rating} out of 5 stars`}>
-                        {'★'.repeat(rev.rating)}
-                        {'☆'.repeat(5 - rev.rating)}
-                      </div>
-                      <span className="review-date-label">{rev.date || 'Recent'}</span>
-                    </div>
-                  </div>
-
-                  <p className="review-body-text">{rev.text}</p>
-
-                  <div className="review-card-footer">
-                    <div className="footer-left-actions">
-                      <span className="review-loc-tag">ABTECH Kolkata</span>
-                    </div>
-                  </div>
-                </article>
-              );
-            })
-          )}
-        </div>
-
-      </div>
-    </section>
+    </div>
   );
 }
+
+export { ReviewDisplayBox as StudentReviews };

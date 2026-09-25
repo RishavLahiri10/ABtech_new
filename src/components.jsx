@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { institute, services } from './content';
-export { default as StudentReviews } from './StudentReviews';
-export { default as ImageDisplayBox } from './ImageDisplayBox';
+export { default as ReviewDisplayBox, default as StudentReviews } from './StudentReviews';
+export { default as ImageDisplayBox } from './StudentReviews';
 export { default as SearchBar } from './SearchBar';
 
 export function Brand() {
