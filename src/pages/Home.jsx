@@ -73,13 +73,10 @@ export default function Home({ onOpenInquiry }) {
               Official guidance for <strong>NIOS</strong>, <strong>BOSSE</strong>, <strong>IGNOU</strong>, <strong>College Admissions</strong>, and <strong>Career Counselling</strong> in Kolkata. Step back into education and achieve your ambitions with expert support.
             </p>
 
-            <div className="actions hero-actions-wrap">
+            <div className="actions">
               <button
-                className="button button-maroon button-hero-inquire"
+                className="button button-maroon"
                 type="button"
-                style={{
-                  transform: `translate3d(0, ${scrollY * -0.06}px, 0)`,
-                }}
                 onClick={() =>
                   onOpenInquiry({
                     formName: 'Admission Inquiry',
@@ -94,11 +91,8 @@ export default function Home({ onOpenInquiry }) {
               </button>
 
               <Link
-                className="button button-outline-maroon button-hero-explore"
+                className="button button-outline-maroon"
                 to="/services"
-                style={{
-                  transform: `translate3d(0, ${scrollY * 0.04}px, 0)`,
-                }}
               >
                 Explore NIOS Services →
               </Link>

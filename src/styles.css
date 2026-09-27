@@ -988,31 +988,6 @@ nav a.active::after {
   text-decoration: underline;
 }
 
-/* ==========================================================================
-   Hero Parallax Buttons
-   ========================================================================== */
-
-.hero-actions-wrap {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  gap: 16px;
-  flex-wrap: wrap;
-  margin-block: 28px;
-}
-
-.button-hero-inquire,
-.button-hero-explore {
-  position: relative;
-  z-index: 2;
-  will-change: transform;
-  transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.2s ease, background-color 0.2s ease;
-}
-
-.button-hero-inquire:hover,
-.button-hero-explore:hover {
-  transform: translateY(-3px) scale(1.02) !important;
-}
 
 /* ==========================================================================
    Badges & Tags
