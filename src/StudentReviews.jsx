@@ -94,7 +94,7 @@ function getInitials(name) {
  * 30% person's photo / 70% review content, automatic 2-second slide transition,
  * responsive mobile layout, and a Read More modal for detailed reviews.
  */
-export default function ReviewDisplayBox({ onOpenInquiry }) {
+export default function ReviewDisplayBox({ onOpenInquiry, autoPlayInterval = 3500 }) {
   const reviews = INITIAL_REVIEWS;
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
@@ -117,18 +117,18 @@ export default function ReviewDisplayBox({ onOpenInquiry }) {
     setCurrentIndex((prev) => (prev - 1 + totalReviews) % totalReviews);
   }, [totalReviews]);
 
-  // Auto-play timer: 2 seconds, pauses when user hovers
+  // Auto-play timer: smoothly advances with pause on hover
   useEffect(() => {
     if (totalReviews <= 1) return;
     if (!isHovered) {
       timerRef.current = setInterval(() => {
         nextSlide();
-      }, 2000);
+      }, autoPlayInterval);
     }
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
     };
-  }, [isHovered, nextSlide, totalReviews]);
+  }, [isHovered, autoPlayInterval, nextSlide, totalReviews]);
 
   // Touch swipe gestures
   const handleTouchStart = (e) => {
@@ -197,7 +197,8 @@ export default function ReviewDisplayBox({ onOpenInquiry }) {
                         src={rev.avatar}
                         alt={`${rev.name} portrait`}
                         className="header-reviewer-img"
-                        loading={idx === 0 ? 'eager' : 'lazy'}
+                        loading="eager"
+                        decoding="async"
                       />
                     ) : (
                       <div className="header-reviewer-fallback">

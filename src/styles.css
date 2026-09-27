@@ -1078,12 +1078,17 @@ nav a.active::after {
   inset: 0;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  visibility: hidden;
+  z-index: 1;
+  transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.8s step-end;
 }
 
 .display-box-slide.active {
   opacity: 1;
   pointer-events: auto;
+  visibility: visible;
+  z-index: 2;
+  transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), visibility 0s;
 }
 
 .slide-image {
@@ -1093,6 +1098,15 @@ nav a.active::after {
   object-position: center;
   user-select: none;
   -webkit-user-drag: none;
+  opacity: 0;
+  transform: scale(1.04);
+  transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.display-box-slide.active .slide-image {
+  opacity: 1;
+  transform: scale(1);
 }
 
 /* Responsive Rules for Reduced Height Display Box */
@@ -2970,14 +2984,18 @@ textarea {
   flex-direction: row;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  visibility: hidden;
+  z-index: 1;
+  transition: opacity 0.75s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.75s step-end;
   box-sizing: border-box;
 }
 
 .header-review-slide.active {
   opacity: 1;
   pointer-events: auto;
+  visibility: visible;
   z-index: 2;
+  transition: opacity 0.75s cubic-bezier(0.4, 0, 0.2, 1), visibility 0s;
 }
 
 /* ---------------- 30% Person Photo Section ---------------- */
@@ -2999,11 +3017,23 @@ textarea {
   display: block;
   user-select: none;
   -webkit-user-drag: none;
-  transition: transform 0.6s ease;
+  opacity: 0;
+  transform: scale(1.06);
+  filter: blur(1px);
+  transition: opacity 0.75s cubic-bezier(0.4, 0, 0.2, 1), 
+              transform 0.85s cubic-bezier(0.16, 1, 0.3, 1), 
+              filter 0.65s ease;
+  will-change: opacity, transform, filter;
 }
 
-.header-review-display-frame:hover .header-reviewer-img {
-  transform: scale(1.03);
+.header-review-slide.active .header-reviewer-img {
+  opacity: 1;
+  transform: scale(1);
+  filter: blur(0px);
+}
+
+.header-review-display-frame:hover .header-review-slide.active .header-reviewer-img {
+  transform: scale(1.035);
 }
 
 .header-reviewer-fallback {
@@ -3017,6 +3047,16 @@ textarea {
   font-size: 2.6rem;
   font-weight: 800;
   letter-spacing: 1px;
+  opacity: 0;
+  transform: scale(0.95);
+  transition: opacity 0.75s cubic-bezier(0.4, 0, 0.2, 1), 
+              transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.header-review-slide.active .header-reviewer-fallback {
+  opacity: 1;
+  transform: scale(1);
 }
 
 .header-reviewer-badge-bottom {
@@ -3024,6 +3064,14 @@ textarea {
   bottom: 10px;
   left: 10px;
   z-index: 3;
+  opacity: 0;
+  transform: translateY(3px);
+  transition: opacity 0.5s ease 0.1s, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.1s;
+}
+
+.header-review-slide.active .header-reviewer-badge-bottom {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .star-rating-pill {
@@ -3060,6 +3108,16 @@ textarea {
   gap: 12px;
   border-bottom: 1px solid var(--maroon-tint);
   padding-bottom: 8px;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.header-review-slide.active .header-rev-top-row {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1) 0.08s, 
+              transform 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.08s;
 }
 
 .header-rev-author-meta {
@@ -3135,6 +3193,16 @@ textarea {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.header-review-slide.active .header-rev-text-block {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.75s cubic-bezier(0.4, 0, 0.2, 1) 0.14s, 
+              transform 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.14s;
 }
 
 .quote-mark-icon {
@@ -3147,6 +3215,16 @@ textarea {
   line-height: 1;
   pointer-events: none;
   user-select: none;
+  opacity: 0;
+  transform: scale(0.85);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.header-review-slide.active .quote-mark-icon {
+  opacity: 1;
+  transform: scale(1);
+  transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.1s, 
+              transform 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.1s;
 }
 
 .header-rev-text-body {
